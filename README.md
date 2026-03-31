@@ -1,11 +1,11 @@
 # SEO Ladders — AI Agent Skill
 
-SEO Ladders is a full SEO content automation platform accessible via MCP. It runs the same pipeline an SEO team would — audit your site's technical health, check what keywords any domain ranks for on Google, discover site structure, then select keywords your domain can rank for based on your domain rating. From there, generate full SEO articles (3,000+ words with citations, images, FAQ, and JSON-LD schemas), publish directly to WordPress or any CMS via webhook, or save locally as Markdown + HTML. Track your keyword rankings and monitor competitors over time — all from your terminal or IDE.
+SEO Ladders is a full SEO content automation platform accessible via MCP. It runs the same pipeline an SEO team would — audit your site's technical health, check what keywords any domain ranks for on Google, discover site structure, then select keywords your domain can rank for based on your domain rating. From there, generate full SEO articles (YouTube embeds, FAQ, citations, E-E-A-T signals, images, and JSON-LD schemas), publish directly to WordPress or any CMS via webhook, or save locally as Markdown + HTML. Track your keyword rankings and monitor competitors over time — all from your terminal or IDE.
 
 ## Install
 
 ```bash
-npx skills add YOUR_USERNAME/seo-ladders-skill/seo-ladders
+npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 ```
 
 ## Setup
