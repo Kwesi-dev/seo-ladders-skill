@@ -1,18 +1,134 @@
-# SEO Ladders — AI Agent Skill
-
-SEO Ladders is a full SEO content automation platform accessible via MCP. It runs the same pipeline an SEO team would — audit your site's technical health, check what keywords any domain ranks for on Google, discover site structure, then select keywords your domain can rank for based on your domain rating. From there, generate full SEO articles (YouTube embeds, FAQ, citations, E-E-A-T signals, images, and JSON-LD schemas), publish directly to WordPress or any CMS via webhook, or save locally as Markdown + HTML. Track your keyword rankings and monitor competitors over time — all from your terminal or IDE.
-
-## Install
+## Install as a skill
 
 ```bash
 npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 ```
 
-## Setup
+# SEO Ladders SEO Skill
 
-1. Sign up at [seoladders.com](https://seoladders.com)
-2. Go to **Dashboard > MCP Server** and create an API key
-3. Add to your `.mcp.json`:
+AI-search + SEO for AI agents. Use any AI model you want. SEO Ladders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a backlink exchange, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
+
+Most "AI SEO" skills stop at writing articles and trading backlinks. This one also measures whether AI is recommending you — and closes the gap.
+
+## Quick Start
+
+```bash
+export SEO_LADDERS_API_KEY=your_key_here
+```
+
+No installation required for the API. The skill uses `curl` and `jq`. The first time it loads, it walks the user through the proper AI-SEO process: account + onboarding, connect website + Google Search Console, audit, **check AI visibility**, topic clusters, write + backlink, optimize.
+
+Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`. Target a specific site with `?site=<domain>` or an `X-Site: <domain>` header.
+
+## The proper AI-SEO process (what this skill runs)
+
+1. Sign up and complete onboarding at [seoladders.com](https://seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A 3-day free trial is available.
+2. Connect the two things that matter most: the website/CMS and Google Search Console.
+3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
+4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
+5. **Track the right prompts** (`/prompts`) — including ones derived from your real Google Search Console queries. Respect the cap; swap low-value prompts when full.
+6. Plan topic clusters, then do keyword research to fill them (`/keyword-research`).
+7. Write and publish (`/write-article`), always including 1–2 backlink-exchange links.
+8. Optimize pages stuck on page 2+ (`/optimize`) and refresh decaying articles (`/content-refresh`).
+9. Act on the recommendations (`/actions`) — outreach, Reddit, and content gaps from your real data.
+
+## Slash Commands
+
+| Command | What it does |
+|---|---|
+| `/seo-ladders` | Overview, account status, and the proper AI-SEO process |
+| `/seo-ladders-setup` | Check the API key + what's connected (CMS / GSC), list your sites |
+| `/ai-visibility` | AI-visibility score across engines (+ sub-views: citations, sentiment, sources) |
+| `/content-gaps` | Buyer questions where AI doesn't name you — your highest-leverage things to write |
+| `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
+| `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
+| `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
+| `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
+| `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
+| `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to refresh or optimize |
+| `/keyword-research [seed]` | Keyword ideas — manual (give a seed) or "find keywords for me" (auto, DR-matched) |
+| `/write-article <keyword>` | Research, write, link, backlink, and publish one article |
+| `/optimize` | Rewrite pages stuck on page 2+ using GSC data |
+| `/content-refresh` | Find and refresh articles whose rankings are decaying |
+| `/backlinks` | Check exchange membership, credits, and link targets |
+| `/content-calendar` | List, schedule, and manage AutoBlog articles |
+| `/posts` | Your generated/published articles — content inventory (avoid re-covering topics) |
+| `/knowledge` | List/add knowledge facts that ground article writing (optional — site is already scraped) |
+
+Command files live in `seo-ladders/commands/`. If they're not auto-registered by your installer, run `/seo-ladders-setup` or copy `commands/*.md` into your project's `.claude/commands/` folder.
+
+## Plans
+
+| Plan | Price | What you get |
+|---|---|---|
+| **Pro (trial)** | 3-day free trial | Full access to everything below |
+| **Pro** | $99/mo early-bird ($139 list), per website | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
+
+The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://seoladders.com/pricing). See `seo-ladders/references/plans-and-backlinks.md` for detail.
+
+## Commands (raw API)
+
+```bash
+# Your sites
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/projects | jq .
+
+# AI visibility across engines (+ sub-views)
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/ai-visibility | jq '{visibilityScore, perEngine, shareOfVoice}'
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/ai-visibility/content-gaps | jq '.gaps[]'
+
+# Audit (async → poll the job) + Content Radar
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{}' https://www.seoladders.com/api/v1/audit | jq '{jobId, status}'
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/content-radar | jq '.rows[] | {url, bucket, action}'
+
+# Keyword research — manual seed, or find-for-me (empty body)
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{"seed":"ai seo tools","filterByDR":true}' https://www.seoladders.com/api/v1/keywords/search | jq '.keywords[]'
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{}' https://www.seoladders.com/api/v1/keywords/discover | jq '{seed, keywords}'
+
+# Write + publish an article (async → poll the job)
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{"keyword":"best ai seo tools"}' https://www.seoladders.com/api/v1/articles | jq .
+
+# Backlink exchange · calendar · actions
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/backlinks | jq '{membership, balance}'
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/calendar | jq '.entries[]'
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/actions | jq '.actions[]'
+```
+
+Full endpoint reference + every command's curl lives in `seo-ladders/SKILL.md`.
+
+## AI Visibility (the differentiator)
+
+This is what classic "AI SEO" skills don't do. On a schedule (and on demand from the dashboard), SEO Ladders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode the buyer questions you track, then measures:
+
+- **Visibility score** + per-engine mention rate
+- **Share of voice** — you vs. each competitor (5 tracked slots)
+- **Sentiment** — how positively AI frames you
+- **Citations** — the sources AI pulls from (earn links where `owned:false`)
+- **Content gaps** — questions where you're absent → write those next
+
+Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seo-ladders/references/ai-visibility-playbook.md`.
+
+## Backlink Exchange
+
+Earn real backlinks that lift your domain authority through a DR-weighted exchange network. Give links in your articles to earn links back. Check membership, credits, and targets with `/backlinks`; join at the dashboard. See `seo-ladders/references/plans-and-backlinks.md`.
+
+## References
+
+- `seo-ladders/references/ai-visibility-playbook.md` — grow how AI recommends you
+- `seo-ladders/references/audit-playbook.md` — the audit-first workflow
+- `seo-ladders/references/onboarding-guide.md` — first-run setup + API key
+- `seo-ladders/references/plans-and-backlinks.md` — plan detail + exchange mechanics
+
+## MCP Server (Claude Code / Cursor / Windsurf / Codex)
+
+Clients that support MCP can skip curl and connect the hosted server — same API key, tools auto-discovered:
 
 ```json
 {
@@ -20,86 +136,17 @@ npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
     "seo-ladders": {
       "type": "http",
       "url": "https://www.seoladders.com/api/mcp",
-      "headers": {
-        "Authorization": "Bearer sk_live_..."
-      }
+      "headers": { "Authorization": "Bearer sk_live_..." }
     }
   }
 }
 ```
 
-**Other clients:** Works with Cursor, Windsurf, Codex, and any MCP-compatible tool. See [full setup guide](https://seoladders.com/features/mcp).
+## Get an API Key
 
-## The Full Pipeline
+1. Sign up at [seoladders.com](https://seoladders.com) and complete onboarding (we scrape your site to learn the business). A 3-day free trial is available.
+2. Connect your website/CMS and Google Search Console (powers the audit, Content Radar, rankings, and prompt discovery).
+3. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
+4. Export it: `export SEO_LADDERS_API_KEY=sk_live_...`
 
-### Analyze & Discover
-- **Site Audit** — Health score, broken links, missing meta tags, duplicate content, Core Web Vitals via Lighthouse
-- **Check Rankings** — See what keywords any domain (yours or competitors) ranks for on Google
-- **Discover Site** — Map any website's structure via sitemaps and page classification
-
-### Research & Plan
-- **Select Keywords** — Select keywords your domain can rank for based on your domain rating
-- **Research Keywords** — Manual keyword search with volume, KD, intent, and DR-based recommendations
-- **Content Calendar** — View, add, update, delete, and swap scheduled keywords
-- **Detect Refresh Candidates** — Find published articles with ranking drops that need updating
-
-### Generate & Publish
-- **Generate Articles** — 13-step AI pipeline producing 3,000+ word articles with images, FAQ, citations, JSON-LD schemas, and internal links
-- **Publish to CMS** — Push to WordPress or any webhook-based CMS (Webflow, Ghost, Strapi, etc.)
-- **Save Locally** — Articles returned as Markdown + complete HTML document (meta tags, Open Graph, Twitter cards, JSON-LD, table of contents)
-- **View on Dashboard** — Every generated article includes a link to view and edit on seoladders.com
-
-## 11 Tools
-
-| Tool | What It Does |
-|------|-------------|
-| `site-audit` | Full technical SEO audit with health score and Core Web Vitals |
-| `check-rankings` | Check what keywords any domain ranks for on Google |
-| `discover-site` | Map website structure via robots.txt and sitemaps |
-| `manual-keyword-search` | Research keywords with DR-based difficulty recommendations |
-| `select-monthly-keywords` | Select keywords your domain can rank for based on your DR |
-| `replace-calendar-keyword` | Swap a scheduled keyword for a better alternative |
-| `generate-article` | 13-step AI article generation pipeline |
-| `publish-to-cms` | Publish to WordPress or any webhook CMS |
-| `manage-calendar` | Content calendar CRUD operations |
-| `detect-refresh-candidates` | Find articles that need content refreshes |
-| `get-job-status` | Poll progress of long-running jobs |
-
-## How to Use
-
-Just ask naturally:
-
-```
-"Audit my website"
-"What keywords does competitor.com rank for?"
-"Find keywords I can win"
-"Run my monthly keyword selection"
-"Generate an article about best project management tools"
-"Publish my latest article to WordPress"
-"What content needs refreshing?"
-"Show my content calendar"
-```
-
-## What You Get Back
-
-**Articles include:**
-- Full Markdown content
-- Complete HTML document with meta tags, OG tags, Twitter cards, canonical URL, JSON-LD schemas, and styled table of contents
-- Structured data (sections, FAQ, media plan) for programmatic use
-- Direct link to view on the SEO Ladders dashboard
-
-**Site audits include:**
-- Health score (0-100) with severity label
-- SSL, sitemap, robots.txt checks
-- Broken links, duplicate titles/descriptions, missing H1s
-- Core Web Vitals (LCP, CLS, TBT) via Lighthouse
-- Actionable recommendations with affected pages
-
-## Works With
-
-Claude Code · Cursor · Windsurf · Codex · n8n · Any MCP Client
-
-## Learn More
-
-- [MCP Feature Page](https://seoladders.com/features/mcp)
-- [SEO Ladders](https://seoladders.com)
+See `seo-ladders/references/onboarding-guide.md` for the full walkthrough.
