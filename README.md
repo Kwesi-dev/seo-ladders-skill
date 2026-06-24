@@ -1,37 +1,110 @@
-## Install as a skill
+# SEO Ladders — AI Search + SEO Skill
+
+AI-search + SEO for any AI agent. SEO Ladders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a backlink exchange, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
+
+Most "AI SEO" skills stop at writing articles and trading backlinks. This one also measures whether AI is recommending you — and closes the gap.
+
+---
+
+## 1. Get your API key — do this first
+
+Everything below needs a key.
+
+1. Sign up at [seoladders.com](https://seoladders.com) and complete onboarding (we scrape your site to learn the business). A **3-day free trial** is available, and the first month is **50% off**.
+2. Connect your **website/CMS** and **Google Search Console** — these power the audit, Content Radar, rankings, and prompt discovery.
+3. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
+
+Full walkthrough: `seo-ladders/references/onboarding-guide.md`.
+
+---
+
+## 2. Install — pick how you'll use it
+
+The same `sk_live_...` key works on every surface. Choose your tool:
+
+### Claude Code  (or Cursor / Windsurf / Codex)
+
+Two ways — use either:
+
+**A) Install the skill** — gets the full process + slash commands:
 
 ```bash
 npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 ```
 
-# SEO Ladders SEO Skill
+**B) Connect the MCP server** — tools auto-discovered, no curl:
 
-AI-search + SEO for AI agents. Use any AI model you want. SEO Ladders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a backlink exchange, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
-
-Most "AI SEO" skills stop at writing articles and trading backlinks. This one also measures whether AI is recommending you — and closes the gap.
-
-## Quick Start
-
-```bash
-export SEO_LADDERS_API_KEY=your_key_here
+```json
+{
+  "mcpServers": {
+    "seo-ladders": {
+      "type": "http",
+      "url": "https://www.seoladders.com/api/mcp",
+      "headers": { "Authorization": "Bearer sk_live_..." }
+    }
+  }
+}
 ```
 
-No installation required for the API. The skill uses `curl` and `jq`. The first time it loads, it walks the user through the proper AI-SEO process: account + onboarding, connect website + Google Search Console, audit, **check AI visibility**, topic clusters, write + backlink, optimize.
+### Claude app  (web + desktop)
 
-Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`. Target a specific site with `?site=<domain>` or an `X-Site: <domain>` header.
+Add it as a **Skill**:
 
-## The proper AI-SEO process (what this skill runs)
+1. **Customize → Skills → +** (add a personal skill).
+2. Upload the `seo-ladders/` folder (zipped) — `SKILL.md` + `commands/` + `references/`.
+3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
+4. Provide your API key when asked.
 
-1. Sign up and complete onboarding at [seoladders.com](https://seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A 3-day free trial is available.
-2. Connect the two things that matter most: the website/CMS and Google Search Console.
+**Optional — also add the MCP connector** so your key is stored for execution:
+
+- **Customize → Connectors → Add custom connector** → `https://www.seoladders.com/api/mcp` → header `Authorization: Bearer sk_live_...`
+
+### ChatGPT
+
+Build a **Custom GPT** that calls the API:
+
+1. **Create a GPT → Configure → Actions → Import from URL** → `https://www.seoladders.com/api/openapi.json`
+2. **Authentication → API Key → Bearer** → paste your `sk_live_...`
+3. Paste `seo-ladders/SKILL.md` into the GPT's **Instructions** (this gives it the process + commands).
+4. Ask it to "check my AI visibility", "audit my site", or "write an article for &lt;keyword&gt;" — it runs the real calls.
+
+> **Per-user keys:** a *published* GPT with API-Key auth uses one key for everyone. So each user should create their **own** Custom GPT with their own key — or, on ChatGPT Pro/Business, add the MCP server (`/api/mcp`) as a custom connector (per-user auth).
+
+### Any terminal / other AI
+
+Export the key and use the `curl` commands (see **Commands (raw API)** below) — works anywhere, no install:
+
+```bash
+export SEO_LADDERS_API_KEY=sk_live_...
+```
+
+Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`. Target a specific site with `?site=<domain>` or an `X-Site: <domain>` header (defaults to your active site).
+
+---
+
+## Skill or MCP — what's the difference?
+
+- **Skill** = the **brain**: the proper AI-SEO process plus the slash commands. Works in Claude Code and the Claude app.
+- **MCP** = the **hands**: the same operations exposed as auto-discovered, authenticated tools. Works in any MCP client.
+
+Same backend, same data. Use the **Skill** where it's supported (it carries the method, not just the tools); add the **MCP** for cleaner stored auth. In ChatGPT you recreate the Skill by pasting `SKILL.md` into Instructions, and the OpenAPI Action gives it the hands.
+
+---
+
+## How it works — the proper AI-SEO process
+
+This is the loop the skill runs (and what it walks you through the first time it loads):
+
+1. **Sign up and onboard** at [seoladders.com](https://seoladders.com) — we scrape the site to learn the brand, audience, and competitors.
+2. **Connect** the two things that matter most: the website/CMS and Google Search Console.
 3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
 5. **Track the right prompts** (`/prompts`) — including ones derived from your real Google Search Console queries. Respect the cap; swap low-value prompts when full.
-6. Plan topic clusters, then do keyword research to fill them (`/keyword-research`).
+6. **Plan topic clusters**, then do keyword research to fill them (`/keyword-research`).
 7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
-8. Write and publish (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available).
-9. Optimize pages stuck on page 2+ (`/optimize`) and refresh decaying articles (`/content-refresh`).
-10. Act on the recommendations (`/actions`) — outreach, Reddit, and content gaps from your real data.
+8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available).
+9. **Optimize** pages stuck on page 2+ (`/optimize`) and **refresh** decaying articles (`/content-refresh`).
+10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
 
 ## Slash Commands
 
@@ -119,7 +192,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
   -d '{}' https://www.seoladders.com/api/v1/backlinks/join | jq '{joined, membership}'
 ```
 
-Full endpoint reference + every command's curl lives in `seo-ladders/SKILL.md`.
+Full endpoint reference + every command's curl lives in `seo-ladders/SKILL.md`. The MCP server exposes a tool for each of these — same capabilities, auto-discovered.
 
 ## AI Visibility (the differentiator)
 
@@ -143,68 +216,3 @@ Earn real backlinks that lift your domain authority through a DR-weighted exchan
 - `seo-ladders/references/audit-playbook.md` — the audit-first workflow
 - `seo-ladders/references/onboarding-guide.md` — first-run setup + API key
 - `seo-ladders/references/plans-and-backlinks.md` — plan detail + exchange mechanics
-
-## Install / connect in any AI (you don't need Claude Code)
-
-The skill is three layers — **markdown commands**, a **hosted MCP server**, and a **REST API + OpenAPI spec** — so it runs almost anywhere. One API key (`sk_live_...`) works across every surface. Pick the row that matches your tool:
-
-### Claude Code / Cursor / Windsurf / Codex (MCP clients)
-
-`npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders`, **or** add the hosted MCP server (tools auto-discovered, no curl):
-
-```json
-{
-  "mcpServers": {
-    "seo-ladders": {
-      "type": "http",
-      "url": "https://www.seoladders.com/api/mcp",
-      "headers": { "Authorization": "Bearer sk_live_..." }
-    }
-  }
-}
-```
-
-### Claude app (web + desktop) — *no Claude Code required*
-
-**Recommended: add it as a Skill** (native, no Pro plan required). The Skill carries the full process — audit-first, the AI-visibility loop, the commands — not just raw tools.
-
-1. **Customize → Skills → +** (add a personal skill).
-2. Upload the `seo-ladders/` folder (zipped) — `SKILL.md` + `commands/` + `references/`.
-3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
-4. Provide your API key when prompted (or add the connector below so auth is stored).
-
-**Optional — also add the MCP connector** for cleaner, stored authentication:
-
-- **Customize → Connectors → Add custom connector** → `https://www.seoladders.com/api/mcp` → header `Authorization: Bearer sk_live_...`
-
-> **Skill = the brain (process + commands); MCP = the hands (authenticated tools).** They're complementary — the Skill alone works; the connector just makes execution cleaner. The MCP hits the same backend, so it has the same *capabilities* but none of the *process*. Lead with the Skill.
-
-### ChatGPT — *no Claude Code required*
-
-Build a **Custom GPT** that calls the REST API directly:
-
-1. **Create a GPT → Configure → Actions → Import from URL** → `https://www.seoladders.com/api/openapi.json`
-2. **Authentication → API Key → Bearer** → paste your `sk_live_...`
-3. Paste the contents of `seo-ladders/SKILL.md` (and the commands you want) into the GPT's **Instructions**.
-4. Ask it to "check my AI visibility" / "audit my site" / "write an article for <keyword>" and it runs the real calls.
-
-> **Per-user keys:** a *published* GPT with API-Key auth sends one key for everyone. For each user to use their own account, have them create their **own** Custom GPT with their key — or, on ChatGPT Pro/Business, add the MCP server (`/api/mcp`) as a **custom connector** instead (per-user auth).
-
-### Any other model / no installation
-
-Export the key and use the raw `curl` commands below — works in any terminal or any assistant that can run code:
-
-```bash
-export SEO_LADDERS_API_KEY=sk_live_...
-```
-
-> For pure **content/marketing** generation (tweets, reels, Reddit posts) you don't need a connector at all — just paste your brand context. The connector/Action is only needed when you want the AI to *run SEO operations* (audits, article writing, AI-visibility checks).
-
-## Get an API Key
-
-1. Sign up at [seoladders.com](https://seoladders.com) and complete onboarding (we scrape your site to learn the business). A 3-day free trial is available.
-2. Connect your website/CMS and Google Search Console (powers the audit, Content Radar, rankings, and prompt discovery).
-3. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
-4. Export it: `export SEO_LADDERS_API_KEY=sk_live_...`
-
-See `seo-ladders/references/onboarding-guide.md` for the full walkthrough.
