@@ -144,9 +144,13 @@ Earn real backlinks that lift your domain authority through a DR-weighted exchan
 - `seo-ladders/references/onboarding-guide.md` — first-run setup + API key
 - `seo-ladders/references/plans-and-backlinks.md` — plan detail + exchange mechanics
 
-## MCP Server (Claude Code / Cursor / Windsurf / Codex)
+## Install / connect in any AI (you don't need Claude Code)
 
-Clients that support MCP can skip curl and connect the hosted server — same API key, tools auto-discovered:
+The skill is three layers — **markdown commands**, a **hosted MCP server**, and a **REST API + OpenAPI spec** — so it runs almost anywhere. One API key (`sk_live_...`) works across every surface. Pick the row that matches your tool:
+
+### Claude Code / Cursor / Windsurf / Codex (MCP clients)
+
+`npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders`, **or** add the hosted MCP server (tools auto-discovered, no curl):
 
 ```json
 {
@@ -159,6 +163,42 @@ Clients that support MCP can skip curl and connect the hosted server — same AP
   }
 }
 ```
+
+### Claude app (web + desktop) — *no Claude Code required*
+
+**Recommended: add it as a Skill** (native, no Pro plan required). The Skill carries the full process — audit-first, the AI-visibility loop, the commands — not just raw tools.
+
+1. **Customize → Skills → +** (add a personal skill).
+2. Upload the `seo-ladders/` folder (zipped) — `SKILL.md` + `commands/` + `references/`.
+3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
+4. Provide your API key when prompted (or add the connector below so auth is stored).
+
+**Optional — also add the MCP connector** for cleaner, stored authentication:
+
+- **Customize → Connectors → Add custom connector** → `https://www.seoladders.com/api/mcp` → header `Authorization: Bearer sk_live_...`
+
+> **Skill = the brain (process + commands); MCP = the hands (authenticated tools).** They're complementary — the Skill alone works; the connector just makes execution cleaner. The MCP hits the same backend, so it has the same *capabilities* but none of the *process*. Lead with the Skill.
+
+### ChatGPT — *no Claude Code required*
+
+Build a **Custom GPT** that calls the REST API directly:
+
+1. **Create a GPT → Configure → Actions → Import from URL** → `https://www.seoladders.com/api/openapi.json`
+2. **Authentication → API Key → Bearer** → paste your `sk_live_...`
+3. Paste the contents of `seo-ladders/SKILL.md` (and the commands you want) into the GPT's **Instructions**.
+4. Ask it to "check my AI visibility" / "audit my site" / "write an article for <keyword>" and it runs the real calls.
+
+> **Per-user keys:** a *published* GPT with API-Key auth sends one key for everyone. For each user to use their own account, have them create their **own** Custom GPT with their key — or, on ChatGPT Pro/Business, add the MCP server (`/api/mcp`) as a **custom connector** instead (per-user auth).
+
+### Any other model / no installation
+
+Export the key and use the raw `curl` commands below — works in any terminal or any assistant that can run code:
+
+```bash
+export SEO_LADDERS_API_KEY=sk_live_...
+```
+
+> For pure **content/marketing** generation (tweets, reels, Reddit posts) you don't need a connector at all — just paste your brand context. The connector/Action is only needed when you want the AI to *run SEO operations* (audits, article writing, AI-visibility checks).
 
 ## Get an API Key
 
