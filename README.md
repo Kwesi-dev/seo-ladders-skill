@@ -48,10 +48,23 @@ npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 
 ### Claude app  (web + desktop)
 
-Add it as a **Skill**:
+Add it as a **Skill**. You upload a small `.zip` of the skill folder — here's how to make it (no command line needed):
+
+**Step 1 — get the skill folder**
+
+On this repo's GitHub page, click the green **Code** button → **Download ZIP**, then unzip it. Inside you'll find a folder called **`seo-ladders`** (it holds `SKILL.md`, `commands/`, and `references/`).
+
+**Step 2 — zip just the `seo-ladders` folder**
+
+- **Mac:** right-click the `seo-ladders` folder → **Compress "seo-ladders"** → you get `seo-ladders.zip`.
+- **Windows:** right-click the `seo-ladders` folder → **Send to → Compressed (zipped) folder**.
+
+> Zip the **`seo-ladders` folder itself** (the one with `SKILL.md` inside) — not the whole repo.
+
+**Step 3 — upload it to Claude**
 
 1. **Customize → Skills → +** (add a personal skill).
-2. Upload the `seo-ladders/` folder (zipped) — `SKILL.md` + `commands/` + `references/`.
+2. Upload `seo-ladders.zip`.
 3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
 4. Provide your API key when asked.
 
