@@ -18,10 +18,27 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   - `low_ctr` — ranks fine but few clicks (title/meta problem).
   - `page_two_plus` — buried on page 2+.
   - `underperforming` — impressions without the clicks/position to match.
-- **`action`** — the verdict: `refresh` (decaying article, update it) or `optimize` (page-2 page, rewrite from GSC data).
+- **`action`** — the verdict, based on whether we can rewrite the page:
+  - `refresh` — a decaying article *we* generated → update it in place (`/content-refresh`).
+  - `optimize` — a page-2 article *we* generated → rewrite from GSC data (`/optimize`).
+  - `recommend` — an **external** page (a pre-join blog, or a non-article page like `/pricing`, `/features`) we can't auto-rewrite → fetch a manual improvement checklist (below).
+- **`source`** — `internal` (we generated it → refresh/optimize) vs `external` (→ recommend).
+
+## Getting recommendations for an external page
+
+For rows with `action: "recommend"`, fetch a concrete on-page checklist:
+
+```bash
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com/pricing","keyword":"best crm pricing","bucket":"striking_distance","position":14}' \
+  https://www.seoladders.com/api/v1/content-radar/recommendations | jq '.recommendations[]'
+```
+
+Returns `{ recommendations: [{ title, detail, priority }] }` — specific on-page fixes (title/meta, headings, content gaps, internal links, schema) the user applies manually. Pass the row's `url`, `keyword`, `bucket`, and `position`.
 
 ## What to do with the result
 
-- Group rows by `action`. Route `refresh` → `/content-refresh`, `optimize` → `/optimize`.
+- `refresh` → `/content-refresh`; `optimize` → `/optimize`; `recommend` → fetch the checklist above and walk the user through the fixes.
 - Prioritize `declining` with the largest `positionDrop` and `striking_distance` (fastest wins).
 - This is the audit-first flow. See `references/audit-playbook.md`.

@@ -11,7 +11,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - **200 + projects** → key works.
 - **401 unauthorized** → key is missing or wrong. Tell the user to get one at **Dashboard → Developers** and run `export SEO_LADDERS_API_KEY=sk_live_...`.
-- **402 subscription_required** → surface `action.url` verbatim to start a plan/trial.
+- **402 subscription_required** → surface `action.url` verbatim to start a plan/trial (3-day free trial; first month 50% off).
 - **count is 0** → onboarding not finished. Tell them to sign up + connect their website at the dashboard.
 
 ## 2. Check what's connected (one call)

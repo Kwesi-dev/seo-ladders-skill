@@ -32,7 +32,7 @@ export SEO_LADDERS_API_KEY=your_key_here
 
 The first time this skill loads, walk the user through the proper process below: account + onboarding → connect website + Google Search Console → audit → **check AI visibility** → keyword clusters → write + backlink → optimize.
 
-> Calls require an active subscription (or trial). A request without one returns **HTTP 402 `subscription_required`** with an `action.url` to start a plan — surface that to the user verbatim.
+> Calls require an active subscription (or trial). A request without one returns **HTTP 402 `subscription_required`** with an `action.url` to start a plan — surface that to the user verbatim. A 3-day free trial is available, and the first month is **50% off**.
 
 ## The proper AI-SEO process (what this skill runs)
 
@@ -79,7 +79,7 @@ Command files live in `commands/`. If they're not auto-registered by your instal
 | Plan | Price | What you get |
 |---|---|---|
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
-| **Pro** | $99/mo early-bird, per website | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations, sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
+| **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations, sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
 
 The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://seoladders.com/pricing). See `references/plans-and-backlinks.md` for detail.
 
