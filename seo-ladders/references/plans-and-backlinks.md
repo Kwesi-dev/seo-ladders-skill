@@ -5,7 +5,7 @@
 | Plan | Price | Includes |
 |---|---|---|
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
-| **Pro** | **$99/mo early-bird** ($139 list), **per website** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility (citations, sentiment, share-of-voice) · Content Radar · Backlink Exchange · site audits · auto-publish |
+| **Pro** | **$99/mo early-bird**, **per website** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility (citations, sentiment, share-of-voice) · Content Radar · Backlink Exchange · site audits · auto-publish |
 
 - **Per website** — pricing is per connected site.
 - **Trial** — 3 days, full access.

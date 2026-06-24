@@ -24,6 +24,20 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 `keyword` is required. `date`, `status`, `article_type` are optional.
 
+## Turn on autofill (opt-in autopilot)
+
+Let AutoBlog auto-schedule ~a month of DR-matched keywords each cycle, so the calendar never runs dry:
+
+```bash
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  -H "Content-Type: application/json" -d '{"enabled":true}' \
+  https://www.seoladders.com/api/v1/autoblog/autofill | jq .
+```
+
+Pair it with **auto-publish** (`POST /settings/auto-publish {"enabled":true}`) for fully hands-off generate + ship.
+
+**Confirm with the user before enabling** — autofill spends article quota automatically each cycle.
+
 ## What to do with the result
 
 - Use it to space out publishing instead of writing everything at once.

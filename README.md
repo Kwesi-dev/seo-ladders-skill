@@ -28,9 +28,10 @@ Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Author
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
 5. **Track the right prompts** (`/prompts`) — including ones derived from your real Google Search Console queries. Respect the cap; swap low-value prompts when full.
 6. Plan topic clusters, then do keyword research to fill them (`/keyword-research`).
-7. Write and publish (`/write-article`), always including 1–2 backlink-exchange links.
-8. Optimize pages stuck on page 2+ (`/optimize`) and refresh decaying articles (`/content-refresh`).
-9. Act on the recommendations (`/actions`) — outreach, Reddit, and content gaps from your real data.
+7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
+8. Write and publish (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available).
+9. Optimize pages stuck on page 2+ (`/optimize`) and refresh decaying articles (`/content-refresh`).
+10. Act on the recommendations (`/actions`) — outreach, Reddit, and content gaps from your real data.
 
 ## Slash Commands
 
@@ -39,7 +40,7 @@ Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Author
 | `/seo-ladders` | Overview, account status, and the proper AI-SEO process |
 | `/seo-ladders-setup` | Check the API key + what's connected (CMS / GSC), list your sites |
 | `/ai-visibility` | AI-visibility score across engines (+ sub-views: citations, sentiment, sources) |
-| `/content-gaps` | Buyer questions where AI doesn't name you — your highest-leverage things to write |
+| `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
 | `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
@@ -47,7 +48,9 @@ Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Author
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
 | `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to refresh or optimize |
 | `/keyword-research [seed]` | Keyword ideas — manual (give a seed) or "find keywords for me" (auto, DR-matched) |
+| `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
 | `/write-article <keyword>` | Research, write, link, backlink, and publish one article |
+| `/publish <article-id>` | Publish a generated draft to your connected CMS |
 | `/optimize` | Rewrite pages stuck on page 2+ using GSC data |
 | `/content-refresh` | Find and refresh articles whose rankings are decaying |
 | `/backlinks` | Check exchange membership, credits, and link targets |
@@ -62,7 +65,7 @@ Command files live in `seo-ladders/commands/`. If they're not auto-registered by
 | Plan | Price | What you get |
 |---|---|---|
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
-| **Pro** | $99/mo early-bird ($139 list), per website | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
+| **Pro** | $99/mo early-bird, per website | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
 
 The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://seoladders.com/pricing). See `seo-ladders/references/plans-and-backlinks.md` for detail.
 
@@ -73,11 +76,15 @@ The API (this skill + MCP) is included in Pro — not a separate add-on. Current
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/projects | jq .
 
-# AI visibility across engines (+ sub-views)
+# AI visibility across engines (+ sub-views: citations, sentiment, sources)
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/ai-visibility | jq '{visibilityScore, perEngine, shareOfVoice}'
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/ai-visibility/content-gaps | jq '.gaps[]'
+  https://www.seoladders.com/api/v1/ai-visibility/content-gaps | jq '.gaps[]'   # AI content gaps
+
+# Competitor gap — keywords competitors rank for that you don't (SEO content gap)
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{"competitors":["competitor.com"]}' https://www.seoladders.com/api/v1/keywords/competitor-gap | jq '.keywords[]'
 
 # Audit (async → poll the job) + Content Radar
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
@@ -99,6 +106,17 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/backlinks | jq '{membership, balance}'
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/calendar | jq '.entries[]'
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/actions | jq '.actions[]'
+
+# --- Automation (opt-in — CONFIRM with the user before enabling any of these) ---
+# Publish one generated draft now (must be "ready") · autofill · auto-publish · join exchange
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/articles/ARTICLE_ID/publish | jq '{published, url}'
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{"enabled":true}' https://www.seoladders.com/api/v1/autoblog/autofill | jq '{autofill, message}'
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{"enabled":true}' https://www.seoladders.com/api/v1/settings/auto-publish | jq '{autoPublish, message}'
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
+  -d '{}' https://www.seoladders.com/api/v1/backlinks/join | jq '{joined, membership}'
 ```
 
 Full endpoint reference + every command's curl lives in `seo-ladders/SKILL.md`.
@@ -111,9 +129,9 @@ This is what classic "AI SEO" skills don't do. On a schedule (and on demand from
 - **Share of voice** — you vs. each competitor (5 tracked slots)
 - **Sentiment** — how positively AI frames you
 - **Citations** — the sources AI pulls from (earn links where `owned:false`)
-- **Content gaps** — questions where you're absent → write those next
+- **Content gaps** — buyer questions where AI doesn't name you → write those next (`/content-gaps`)
 
-Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seo-ladders/references/ai-visibility-playbook.md`.
+Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/ai-visibility/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seo-ladders/references/ai-visibility-playbook.md`.
 
 ## Backlink Exchange
 

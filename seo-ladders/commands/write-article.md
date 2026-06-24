@@ -26,12 +26,16 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/articles/ARTICLE_ID | jq .
 ```
 
-- Poll every ~10s until `status` is `completed` (article generation takes a while — it's a full pipeline).
-- On `completed`, the article (Markdown + HTML + a dashboard link) is in `output` / from the article endpoint.
+- Poll every ~10s until `status` is `ready` (article generation takes a while — it's a full pipeline).
+- Once ready, `GET /v1/articles/{id}` returns the finished article:
+  - **`articleMarkdown`** — full article as Markdown
+  - **`htmlContent`** — complete standalone HTML document (head, meta, JSON-LD, table of contents, styled layout, YouTube embeds) — the exact dashboard "Export HTML"
+  - **`articleContentJson`** — structured sections / FAQ / media plan
+  - **`jsonLd`** — schema; plus `title`, `slug`, `metaDescription`, `wordCount`, `externalUrl` (live URL if published)
 
 ## What to do with the result
 
-- **Include 1–2 backlink-exchange links** in the article — that's how you earn links back. Check targets with `/backlinks`.
-- Confirm internal links point at related pillar/cluster pages.
-- Pro includes 20 articles/mo.
-- Write for keywords from `/keyword-research` and the prompt gaps from `/ai-visibility`.
+- Save `htmlContent` to a `.html` file (it's self-contained), or `articleMarkdown` to `.md` — both are publish-ready.
+- The article already ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available) — check exchange targets with `/backlinks`.
+- To push it live, use `/publish <article-id>` (or it auto-publishes if you enabled auto-publish).
+- Pro includes 20 articles/mo. Write for keywords from `/keyword-research` and gaps from `/ai-visibility`.

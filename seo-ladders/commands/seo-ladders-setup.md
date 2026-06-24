@@ -27,6 +27,29 @@ Returns `{ cms: {type, connected, enabled}, gsc: {connected, siteUrl}, webhook: 
   > Connect Google Search Console at the SEO Ladders dashboard. It powers the audit, Content Radar, rankings, and prompt discovery — without it most of this skill runs blind.
 - **`cms.connected: false`** → publishing won't work yet; connect WordPress or a webhook at the dashboard (or generate articles and save them locally for now).
 
+## Offer automations (opt-in)
+
+Once setup passes, **suggest** these three options — do **not** enable any of them. Act only on an explicit "yes" from the user; each is consequential (spends quota, publishes live, or enrolls in a network).
+
+- **(a) AutoBlog autofill** — auto-schedules ~a month of DR-matched keywords each cycle.
+  ```bash
+  curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+    -H "Content-Type: application/json" -d '{"enabled":true}' \
+    https://www.seoladders.com/api/v1/autoblog/autofill | jq .
+  ```
+- **(b) Auto-publish** — finished articles push to the connected CMS automatically (needs a CMS).
+  ```bash
+  curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+    -H "Content-Type: application/json" -d '{"enabled":true}' \
+    https://www.seoladders.com/api/v1/settings/auto-publish | jq .
+  ```
+- **(c) Join the Backlink Exchange** — enroll in the DR-weighted network (link out, earn links in).
+  ```bash
+  curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+    -H "Content-Type: application/json" -d '{}' \
+    https://www.seoladders.com/api/v1/backlinks/join | jq '{joined, membership}'
+  ```
+
 ## What to do with the result
 
 Once the key works and GSC is connected, point them at the audit-first flow: `/gsc-audit` → `/content-radar` → `/ai-visibility`.
