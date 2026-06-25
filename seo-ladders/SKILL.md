@@ -103,9 +103,12 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   "https://www.seoladders.com/api/v1/rankings?domain=example.com&limit=50" | jq '.keywords[] | {keyword, position, url, searchVolume}'
 
-# Google Search Console — queries (or pages) you rank for
+# Google Search Console — queries (or pages) you rank for. Each query row also
+# carries `history: [{date, position}]` — the weekly avg-position trend, so you
+# can tell if a query is improving or slipping (lower position = better).
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  "https://www.seoladders.com/api/v1/search-console?dimension=query&days=90&limit=100" | jq '.rows[]'
+  "https://www.seoladders.com/api/v1/search-console?dimension=query&days=90&limit=100" \
+  | jq '.rows[] | {query, position, impressions, clicks, ctr, trend: (.history // [] | map(.position))}'
 
 # --- Audit ---
 

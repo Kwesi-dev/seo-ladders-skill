@@ -5,13 +5,13 @@ Pull every page from Google Search Console, flag what's declining/stuck/buried, 
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/content-radar \
-  | jq '{connected, count, rows: [.rows[] | {url, primaryKeyword, position, impressions, clicks, ctr, bucket, action, positionDrop}]}'
+  | jq '{connected, count, rows: [.rows[] | {url, primaryKeyword, position, impressions, clicks, ctr, bucket, action, positionDrop, trend: (.history // [] | map(.position))}]}'
 ```
 
 ## How to read it
 
 - **`connected`** — `false` means GSC isn't connected. Tell the user to connect Google Search Console at the dashboard; without it Content Radar has nothing to read.
-- `rows` — `[{url, primaryKeyword, position, impressions, clicks, ctr, source, blogPostId, bucket, action, positionDrop?}]`.
+- `rows` — `[{url, primaryKeyword, position, impressions, clicks, ctr, source, blogPostId, bucket, action, positionDrop?, history?}]`. `history` is `[{date, position}]` — the page's weekly avg-position trend (lower = better), so you can see whether it's improving or slipping over time.
 - **`bucket`**:
   - `declining` — losing position over time (see `positionDrop`).
   - `striking_distance` — close to page 1, a nudge could break it through.
