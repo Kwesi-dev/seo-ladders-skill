@@ -10,7 +10,7 @@ Most "AI SEO" skills stop at writing articles and trading backlinks. This one al
 
 This is the full loop the skill runs (and walks you through the first time it loads). Steps 1–2 are your one-time setup — that's where you create the API key the **Install** section below needs.
 
-1. **Sign up and onboard** at [seoladders.com](https://seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A **3-day free trial** is available, and the first month is **50% off**.
+1. **Sign up and onboard** at [seoladders.com](https://www.seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A **3-day free trial** is available, and the first month is **50% off**.
 2. **Connect** the two things that matter most: the website/CMS and Google Search Console. Then create your API key at **Dashboard → Developers** (`sk_live_...`).
 3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
@@ -145,7 +145,7 @@ Command files live in `seo-ladders/commands/`. If they're not auto-registered by
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
 | **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
 
-The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://seoladders.com/pricing). See `seo-ladders/references/plans-and-backlinks.md` for detail.
+The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `seo-ladders/references/plans-and-backlinks.md` for detail.
 
 ## Commands (raw API)
 

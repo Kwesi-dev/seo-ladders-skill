@@ -3,7 +3,7 @@ name: seo-ladders
 version: 2.0.0
 description: The complete AI-search + SEO skill. Track and grow how AI engines (ChatGPT, Perplexity, Gemini, Claude, Google AI) recommend your brand — then audit your site, find keywords you can win, write and publish full articles, earn backlinks, and optimize decaying pages. Works as a no-install skill (curl + jq) or over MCP.
 author: SEO Ladders
-website: https://seoladders.com
+website: https://www.seoladders.com
 requires:
   env:
     - SEO_LADDERS_API_KEY
@@ -22,7 +22,7 @@ It runs against the SEO Ladders REST API with `curl` + `jq` — **no install req
 
 The API is gated by an API key tied to your SEO Ladders account.
 
-1. Sign up at **[seoladders.com](https://seoladders.com)** and complete onboarding (we read your website to learn the business). A 3-day free trial is available.
+1. Sign up at **[seoladders.com](https://www.seoladders.com)** and complete onboarding (we read your website to learn the business). A 3-day free trial is available.
 2. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
 3. Export it:
 
@@ -81,7 +81,7 @@ Command files live in `commands/`. If they're not auto-registered by your instal
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
 | **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations, sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
 
-The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://seoladders.com/pricing). See `references/plans-and-backlinks.md` for detail.
+The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `references/plans-and-backlinks.md` for detail.
 
 ## Commands (raw API)
 

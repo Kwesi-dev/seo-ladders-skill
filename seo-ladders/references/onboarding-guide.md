@@ -4,7 +4,7 @@ Get from zero to a working skill in five steps. Most of this happens once, on th
 
 ## 1. Sign up
 
-Go to **[seoladders.com](https://seoladders.com)** and create an account. A **3-day free trial** is available — full access, no commitment.
+Go to **[seoladders.com](https://www.seoladders.com)** and create an account. A **3-day free trial** is available — full access, no commitment.
 
 ## 2. Onboarding (we scrape the site)
 
