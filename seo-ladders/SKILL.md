@@ -16,7 +16,12 @@ SEO Ladders is the all-in-one platform for getting **recommended by AI** and **r
 - **AI visibility (GEO/AEO)** — see whether ChatGPT, Perplexity, Gemini, Claude, and Google's AI answers mention you; track the prompts that matter; measure share-of-voice, sentiment, and which sources AI cites.
 - **SEO** — audit your site, see what you (and competitors) rank for, find keywords matched to your domain rating, write and publish full articles, earn backlinks, and optimize pages stuck on page 2.
 
-It runs against the SEO Ladders REST API with `curl` + `jq` — **no install required** — or over MCP for clients that support it.
+It runs against the SEO Ladders REST API. There are two ways to execute the commands — **pick MCP whenever it's available:**
+
+- **MCP tools (preferred).** In the Claude app, Claude Code, Cursor, or any MCP client, connect the SEO Ladders MCP server and use its tools. The calls run **server-side**, so there's no setup, no `jq`, and no network restrictions. **If the SEO Ladders MCP tools are available, use them instead of curl.**
+- **`curl` + `jq` in a terminal.** For Claude Code or your own shell, which have outbound network access. `jq` is only for pretty-printing — drop the `| jq ...` to get raw JSON if `jq` isn't installed.
+
+> ⚠️ **Hosted sandboxes block raw curl.** The Claude app's code-execution tool does **not** ship `jq` and blocks outbound network (you'll see `jq: not found` and `Host not in allowlist: www.seoladders.com`). In the Claude app, **add the MCP connector** (Customize → Connectors → Add custom connector → Remote MCP server URL `https://www.seoladders.com/api/mcp?key=<your-key>` — the web dialog has no header field, so the key goes in the URL) and use the MCP tools — do **not** run the raw curl commands there.
 
 ## Setup (gating)
 

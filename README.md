@@ -25,21 +25,24 @@ Full setup walkthrough: `seo-ladders/references/onboarding-guide.md`.
 
 ---
 
-## 2. Install — pick how you'll use it
+## 2. Install — add the Skill *and* connect the MCP
 
-The same `sk_live_...` key works on every surface. Choose your tool:
+For the best experience, do **both** — in whatever app you use:
+
+- **Skill** → teaches Claude *how* SEO Ladders works: the method, the commands, when to use each. This is what makes Claude actually understand the platform instead of guessing.
+- **MCP** → gives Claude the authenticated tools to *run* everything.
+
+The same `sk_live_...` key works for both. Set it up for your app:
 
 ### Claude Code  (or Cursor / Windsurf / Codex)
 
-Two ways — use either:
-
-**A) Install the skill** — gets the full process + slash commands:
+**1) Install the skill** — the understanding + slash commands:
 
 ```bash
 npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 ```
 
-**B) Connect the MCP server** — tools auto-discovered, no curl:
+**2) Connect the MCP server** — the tools. Add to your MCP config:
 
 ```json
 {
@@ -52,6 +55,8 @@ npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
   }
 }
 ```
+
+Then type `/seo-ladders-setup` to confirm everything's connected.
 
 ### Claude app  (web + desktop)
 
@@ -75,9 +80,14 @@ On this repo's GitHub page, click the green **Code** button → **Download ZIP**
 3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
 4. Provide your API key when asked.
 
-**Optional — also add the MCP connector** so your key is stored for execution:
+**Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
 
-- **Customize → Connectors → Add custom connector** → `https://www.seoladders.com/api/mcp` → header `Authorization: Bearer sk_live_...`
+1. **Customize → Connectors → + → Add custom connector**.
+2. **Name:** `SEO Ladders`
+3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp?key=sk_live_...` — put your key right in the URL. The web dialog has no header field, so the key goes here. (It's your own key, stored in your own connector settings.)
+4. Leave the OAuth fields blank → **Add**.
+
+> The **Skill** gives Claude the process; the **MCP connector** gives it execution. In the Claude app you want **both**. (In Claude Code / Cursor you instead put the key in the config `headers` — see above.)
 
 ### ChatGPT
 
@@ -102,12 +112,12 @@ Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Author
 
 ---
 
-## Skill or MCP — what's the difference?
+## Why both Skill + MCP?
 
-- **Skill** = the **brain**: the proper AI-SEO process plus the slash commands. Works in Claude Code and the Claude app.
-- **MCP** = the **hands**: the same operations exposed as auto-discovered, authenticated tools. Works in any MCP client.
+- **Skill = the brain.** The proper AI-SEO process and the commands — *how* and *when* to use SEO Ladders. Without it, Claude has tools but no strategy (it'd write before auditing, skip the AI-visibility loop, miss the GEO angle, run automation without asking).
+- **MCP = the hands.** The same operations as authenticated, auto-discovered tools that actually execute — and they run server-side, so they work even in apps where raw `curl` can't (like the Claude web app).
 
-Same backend, same data. Use the **Skill** where it's supported (it carries the method, not just the tools); add the **MCP** for cleaner stored auth. In ChatGPT you recreate the Skill by pasting `SKILL.md` into Instructions, and the OpenAPI Action gives it the hands.
+They're complementary, not either/or — add **both** so Claude *understands* SEO Ladders and can *run* it. In ChatGPT you get the same pairing by pasting `SKILL.md` into Instructions (brain) + the OpenAPI Action (hands).
 
 ---
 
