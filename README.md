@@ -6,15 +6,22 @@ Most "AI SEO" skills stop at writing articles and trading backlinks. This one al
 
 ---
 
-## 1. Get your API key — do this first
+## 1. How it works — the proper AI-SEO process
 
-Everything below needs a key.
+This is the full loop the skill runs (and walks you through the first time it loads). Steps 1–2 are your one-time setup — that's where you create the API key the **Install** section below needs.
 
-1. Sign up at [seoladders.com](https://seoladders.com) and complete onboarding (we scrape your site to learn the business). A **3-day free trial** is available, and the first month is **50% off**.
-2. Connect your **website/CMS** and **Google Search Console** — these power the audit, Content Radar, rankings, and prompt discovery.
-3. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
+1. **Sign up and onboard** at [seoladders.com](https://seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A **3-day free trial** is available, and the first month is **50% off**.
+2. **Connect** the two things that matter most: the website/CMS and Google Search Console. Then create your API key at **Dashboard → Developers** (`sk_live_...`).
+3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
+4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
+5. **Track the right prompts** (`/prompts`) — including ones derived from your real Google Search Console queries. Respect the cap; swap low-value prompts when full.
+6. **Plan topic clusters**, then do keyword research to fill them (`/keyword-research`).
+7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
+8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available).
+9. **Optimize** pages stuck on page 2+ (`/optimize`) and **refresh** decaying articles (`/content-refresh`).
+10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
 
-Full walkthrough: `seo-ladders/references/onboarding-guide.md`.
+Full setup walkthrough: `seo-ladders/references/onboarding-guide.md`.
 
 ---
 
@@ -103,21 +110,6 @@ Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Author
 Same backend, same data. Use the **Skill** where it's supported (it carries the method, not just the tools); add the **MCP** for cleaner stored auth. In ChatGPT you recreate the Skill by pasting `SKILL.md` into Instructions, and the OpenAPI Action gives it the hands.
 
 ---
-
-## How it works — the proper AI-SEO process
-
-This is the loop the skill runs (and what it walks you through the first time it loads):
-
-1. **Sign up and onboard** at [seoladders.com](https://seoladders.com) — we scrape the site to learn the brand, audience, and competitors.
-2. **Connect** the two things that matter most: the website/CMS and Google Search Console.
-3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
-4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
-5. **Track the right prompts** (`/prompts`) — including ones derived from your real Google Search Console queries. Respect the cap; swap low-value prompts when full.
-6. **Plan topic clusters**, then do keyword research to fill them (`/keyword-research`).
-7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
-8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available).
-9. **Optimize** pages stuck on page 2+ (`/optimize`) and **refresh** decaying articles (`/content-refresh`).
-10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
 
 ## Slash Commands
 
