@@ -18,11 +18,13 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   - `low_ctr` — ranks fine but few clicks (title/meta problem).
   - `page_two_plus` — buried on page 2+.
   - `underperforming` — impressions without the clicks/position to match.
-- **`action`** — the verdict, based on whether we can rewrite the page:
-  - `refresh` — a decaying article *we* generated → update it in place (`/content-refresh`).
-  - `optimize` — a page-2 article *we* generated → rewrite from GSC data (`/optimize`).
-  - `recommend` — an **external** page (a pre-join blog, or a non-article page like `/pricing`, `/features`) we can't auto-rewrite → fetch a manual improvement checklist (below).
-- **`source`** — `internal` (we generated it → refresh/optimize) vs `external` (→ recommend).
+- **`action`** — the verdict:
+  - `refresh` — a decaying article *we* generated → update it in place (`/content-refresh`, by `blogPostId`).
+  - `optimize` — an article to rewrite from GSC data (`/optimize`). Covers articles *we* generated (by `blogPostId`) **and pre-join blogs/articles you wrote before joining** (by the page `url`).
+  - `recommend` — a **non-article page** (e.g. `/pricing`, `/features`, `/docs`, a landing page) that can't be sensibly rewritten as an article → fetch a manual improvement checklist (below).
+- **`source`** — `internal` (we generated it) vs `external` (pre-join / not ours). Articles get refresh/optimize either way; only non-article pages get `recommend`.
+
+> **Homepage is excluded.** The root/homepage (e.g. `https://site.com/`) is left out of the radar automatically — it's a brand/navigational page that ranks for brand terms, not actionable content. If a user asks why their homepage isn't listed, that's why; it's not a bug.
 
 ## Getting recommendations for an external page
 
