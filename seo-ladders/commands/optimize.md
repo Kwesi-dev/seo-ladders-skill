@@ -4,10 +4,17 @@ Rewrite a page stuck on page 2+ using its real Google Search Console data.
 
 **Page URL** = `$ARGUMENTS`. If `$ARGUMENTS` is empty, pick a `page_two_plus` / `striking_distance` URL from `/content-radar` (or a position 11–20 row from `/rankings`) and confirm with the user.
 
+You must pass **both** the `keyword` and a source. Take them straight from the Content Radar row: use its `primaryKeyword` as `keyword`, and either its `url` (as `sourceUrl` — works for any page, incl. pre-join blogs) **or** its `blogPostId` (for a page we generated).
+
 ```bash
+# By URL (any page, incl. pre-join blogs) — the common case
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  -H "Content-Type: application/json" -d '{"url":"$ARGUMENTS"}' \
+  -H "Content-Type: application/json" \
+  -d '{"keyword":"PRIMARY_KEYWORD","sourceUrl":"$ARGUMENTS"}' \
   https://www.seoladders.com/api/v1/optimizations | jq .
+
+# Or, for a page we generated, pass blogPostId instead of sourceUrl:
+# -d '{"keyword":"PRIMARY_KEYWORD","blogPostId":"BLOG_POST_ID"}'
 ```
 
 ## What to do with the result

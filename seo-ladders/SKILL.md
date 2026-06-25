@@ -190,9 +190,11 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"keyword":"best ai seo tools"}' \
   https://www.seoladders.com/api/v1/articles | jq .
 
-# Optimize a page stuck on page 2
+# Optimize a page stuck on page 2 — pass keyword + a source (sourceUrl for any
+# page incl. pre-join blogs, or blogPostId for a page we generated)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  -H "Content-Type: application/json" -d '{"url":"https://example.com/post"}' \
+  -H "Content-Type: application/json" \
+  -d '{"keyword":"best ai seo tools","sourceUrl":"https://example.com/post"}' \
   https://www.seoladders.com/api/v1/optimizations | jq .
 
 # Find decaying articles to refresh
