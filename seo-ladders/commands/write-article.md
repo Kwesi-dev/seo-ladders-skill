@@ -14,7 +14,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/articles | jq .
 ```
 
-Returns an async batch/job id.
+Returns `{ articleId, status, dashboardUrl }`. **`dashboardUrl`** is a SEO Ladders link to watch/edit the article (`…/dashboard/article-writing?articleId=…`) — share it with the user so they can follow generation and edit in the dashboard.
 
 ## Poll until done
 
@@ -33,7 +33,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   - **`articleMarkdown`** — full article as Markdown
   - **`htmlContent`** — complete standalone HTML document (head, meta, JSON-LD, table of contents, styled layout, YouTube embeds) — the exact dashboard "Export HTML"
   - **`articleContentJson`** — structured sections / FAQ / media plan
-  - **`jsonLd`** — schema; plus `title`, `slug`, `metaDescription`, `wordCount`, `externalUrl` (live URL if published)
+  - **`jsonLd`** — schema; plus `title`, `slug`, `metaDescription`, `wordCount`, `externalUrl` (live URL if published), and **`dashboardUrl`** (the SEO Ladders link to view/edit it)
 
 ## What to do with the result
 
