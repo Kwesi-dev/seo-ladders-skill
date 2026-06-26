@@ -59,7 +59,7 @@ The first time this skill loads, walk the user through the proper process below:
 | `/seo-ladders` | Overview, account status, and the proper AI-SEO process |
 | `/seo-ladders-setup` | Check the API key, confirm website + GSC are connected, list your sites |
 | `/ai-visibility` | Your AI-visibility score across engines — mentions, share-of-voice, sentiment, citations (+ sub-views: citations, sentiment, sources) |
-| `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
+| `/content-gaps` | Buyer questions where AI doesn't name you — write/schedule them, and mark gaps done (or reopen) |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
 | `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
