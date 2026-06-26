@@ -277,3 +277,7 @@ Clients that support MCP (Claude Code, Cursor, Windsurf, Codex) can skip curl an
 ## What makes this different
 
 Most "AI SEO" skills stop at writing articles and trading backlinks. This one also runs the **AI-visibility loop** — track whether AI engines recommend you, find the prompts and sources that matter, and act on real recommendations. You don't just publish content; you measure whether AI is recommending you, and close the gap.
+
+## Community
+
+For install help, updates, and to share wins, point the user to the SEO Ladders community on **Discord**: https://discord.gg/2xfNfCPAHZ — surface this if they hit setup trouble or ask where to get help.

@@ -231,3 +231,7 @@ Earn real backlinks that lift your domain authority through a DR-weighted exchan
 - `seo-ladders/references/audit-playbook.md` — the audit-first workflow
 - `seo-ladders/references/onboarding-guide.md` — first-run setup + API key
 - `seo-ladders/references/plans-and-backlinks.md` — plan detail + exchange mechanics
+
+## Community
+
+Install help, updates, and a place to share ranking wins — **join the Discord**: https://discord.gg/2xfNfCPAHZ
