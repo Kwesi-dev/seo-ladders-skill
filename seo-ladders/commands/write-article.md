@@ -1,10 +1,12 @@
-# /write-article <keyword>
+# /write-article <keyword-or-topic>
 
 Research → draft → media → FAQ → citations → schema → internal links, and publish one article. Async.
 
-**Keyword** = `$ARGUMENTS`. If `$ARGUMENTS` is empty, pull a target from `/content-gaps` or `/keyword-research` first, then confirm it with the user.
+**Target** = `$ARGUMENTS` — a keyword **or a raw topic / question** (e.g. a Content Gap prompt like "how does a search engine match keywords to a page"). No keyword research required: the pipeline studies the top SERP results for whatever you pass and auto-picks the format. If `$ARGUMENTS` is empty, pull a target from `/content-gaps` or `/keyword-research` first, then confirm it with the user.
 
 ## Kick it off
+
+The target — keyword or raw topic — goes in the `keyword` field (it's free-text):
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \

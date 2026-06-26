@@ -68,7 +68,7 @@ The first time this skill loads, walk the user through the proper process below:
 | `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to refresh or optimize |
 | `/keyword-research [seed]` | Keyword ideas with volume, difficulty, DR-match — manual (give a seed) or "find keywords for me" (auto) |
 | `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
-| `/write-article <keyword>` | Research, write, link, backlink, and publish one article |
+| `/write-article <keyword-or-topic>` | Research, write, link, backlink, and publish one article — pass a keyword **or a raw topic/question** (no keyword research needed) |
 | `/publish <article-id>` | Publish a generated draft to your connected CMS |
 | `/optimize` | Rewrite pages stuck on page 2+ using GSC data |
 | `/content-refresh` | Find and refresh articles whose rankings are decaying |
@@ -188,7 +188,9 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"competitors":["competitor.com"]}' \
   https://www.seoladders.com/api/v1/keywords/competitor-gap | jq '.keywords[]'
 
-# Write + publish an article (async → poll the batch/job)
+# Write + publish an article (async → poll the batch/job). The `keyword` field
+# is free-text — pass a keyword OR a raw topic/question (e.g. a Content Gap
+# prompt); the pipeline studies the SERP and picks the format. No research needed.
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"keyword":"best ai seo tools"}' \
   https://www.seoladders.com/api/v1/articles | jq .
