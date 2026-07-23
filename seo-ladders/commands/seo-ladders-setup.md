@@ -29,7 +29,7 @@ Returns `{ cms: {type, connected, enabled}, gsc: {connected, siteUrl}, webhook: 
 
 ## Offer automations (opt-in)
 
-Once setup passes, **suggest** these three options — do **not** enable any of them. Act only on an explicit "yes" from the user; each is consequential (spends quota, publishes live, or enrolls in a network).
+Once setup passes, **suggest** these options — do **not** enable any of them. Act only on an explicit "yes" from the user; each is consequential (spends quota or publishes live).
 
 - **(a) AutoBlog autofill** — auto-schedules ~a month of DR-matched keywords each cycle.
   ```bash
@@ -42,12 +42,6 @@ Once setup passes, **suggest** these three options — do **not** enable any of 
   curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
     -H "Content-Type: application/json" -d '{"enabled":true}' \
     https://www.seoladders.com/api/v1/settings/auto-publish | jq .
-  ```
-- **(c) Join the Backlink Exchange** — enroll in the DR-weighted network (link out, earn links in).
-  ```bash
-  curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-    -H "Content-Type: application/json" -d '{}' \
-    https://www.seoladders.com/api/v1/backlinks/join | jq '{joined, membership}'
   ```
 
 ## What to do with the result

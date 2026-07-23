@@ -1,8 +1,8 @@
 # SEO Ladders — AI Search + SEO Skill
 
-AI-search + SEO for any AI agent. SEO Ladders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a backlink exchange, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
+AI-search + SEO for any AI agent. SEO Ladders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
 
-Most "AI SEO" skills stop at writing articles and trading backlinks. This one also measures whether AI is recommending you — and closes the gap.
+Most "AI SEO" skills stop at writing articles. This one also measures whether AI is recommending you — and closes the gap.
 
 ---
 
@@ -14,12 +14,13 @@ This is the full loop the skill runs (and walks you through the first time it lo
 2. **Connect** the two things that matter most: the website/CMS and Google Search Console. Then create your API key at **Dashboard → Developers** (`sk_live_...`).
 3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
-5. **Track the right prompts** (`/prompts`) — including ones derived from your real Google Search Console queries. Respect the cap; swap low-value prompts when full.
-6. **Plan topic clusters**, then do keyword research to fill them (`/keyword-research`).
+5. **Build topic clusters** (`/topical-authority`) — a pillar topic that holds *both* the keywords to rank for on Google *and* the AI prompts to win in AI answers. Research keywords to fill each cluster (`/keyword-research`), and track the buyer prompts under it.
+6. **Track the right prompts** (`/prompts`) — pull suggestions from your real Google Search Console queries, keywords, or People-Also-Asked, then add the good ones under the relevant topic. Respect the cap; swap low-value prompts when full.
 7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
-8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available).
-9. **Optimize** pages stuck on page 2+ (`/optimize`) and **refresh** decaying articles (`/content-refresh`).
+8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, and citations.
+9. **Optimize** pages stuck on page 2+, declining, or going stale (`/optimize`) — it also refreshes content in place.
 10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
+11. **Get cited** (`/get-cited`) — the pages AI cites for your prompts, classified by motion, with drafted, ready-to-send outreach. You review and send; never auto-sent.
 
 Full setup walkthrough: `seo-ladders/references/onboarding-guide.md`.
 
@@ -131,17 +132,16 @@ They're complementary, not either/or — add **both** so Claude *understands* SE
 | `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
+| `/get-cited` | Pages AI cites for your prompts, classified by motion, with drafted outreach — list, find/refresh, update, follow-up |
 | `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
-| `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to refresh or optimize |
+| `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
 | `/keyword-research [seed]` | Keyword ideas — manual (give a seed) or "find keywords for me" (auto, DR-matched) |
 | `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
-| `/write-article <keyword>` | Research, write, link, backlink, and publish one article |
+| `/write-article <keyword>` | Research, write, link, and publish one article |
 | `/publish <article-id>` | Publish a generated draft to your connected CMS |
 | `/optimize` | Rewrite pages stuck on page 2+ using GSC data |
-| `/content-refresh` | Find and refresh articles whose rankings are decaying |
-| `/backlinks` | Check exchange membership, credits, and link targets |
 | `/content-calendar` | List, schedule, and manage AutoBlog articles |
 | `/posts` | Your generated/published articles — content inventory (avoid re-covering topics) |
 | `/knowledge` | List/add knowledge facts that ground article writing (optional — site is already scraped) |
@@ -153,7 +153,7 @@ Command files live in `seo-ladders/commands/`. If they're not auto-registered by
 | Plan | Price | What you get |
 |---|---|---|
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
-| **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · Backlink Exchange · site audits · auto-publish |
+| **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · site audits · auto-publish |
 
 The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `seo-ladders/references/plans-and-backlinks.md` for detail.
 
@@ -190,21 +190,18 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
   -d '{"keyword":"best ai seo tools"}' https://www.seoladders.com/api/v1/articles | jq .
 
-# Backlink exchange · calendar · actions
-curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/backlinks | jq '{membership, balance}'
+# Calendar · actions
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/calendar | jq '.entries[]'
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/actions | jq '.actions[]'
 
 # --- Automation (opt-in — CONFIRM with the user before enabling any of these) ---
-# Publish one generated draft now (must be "ready") · autofill · auto-publish · join exchange
+# Publish one generated draft now (must be "ready") · autofill · auto-publish
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/articles/ARTICLE_ID/publish | jq '{published, url}'
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
   -d '{"enabled":true}' https://www.seoladders.com/api/v1/autoblog/autofill | jq '{autofill, message}'
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
   -d '{"enabled":true}' https://www.seoladders.com/api/v1/settings/auto-publish | jq '{autoPublish, message}'
-curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
-  -d '{}' https://www.seoladders.com/api/v1/backlinks/join | jq '{joined, membership}'
 ```
 
 Full endpoint reference + every command's curl lives in `seo-ladders/SKILL.md`. The MCP server exposes a tool for each of these — same capabilities, auto-discovered.
@@ -221,16 +218,12 @@ This is what classic "AI SEO" skills don't do. On a schedule (and on demand from
 
 Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/ai-visibility/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seo-ladders/references/ai-visibility-playbook.md`.
 
-## Backlink Exchange
-
-Earn real backlinks that lift your domain authority through a DR-weighted exchange network. Give links in your articles to earn links back. Check membership, credits, and targets with `/backlinks`; join at the dashboard. See `seo-ladders/references/plans-and-backlinks.md`.
-
 ## References
 
 - `seo-ladders/references/ai-visibility-playbook.md` — grow how AI recommends you
 - `seo-ladders/references/audit-playbook.md` — the audit-first workflow
 - `seo-ladders/references/onboarding-guide.md` — first-run setup + API key
-- `seo-ladders/references/plans-and-backlinks.md` — plan detail + exchange mechanics
+- `seo-ladders/references/plans-and-backlinks.md` — plan detail
 
 ## Community
 

@@ -21,5 +21,11 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - Use this on `page_two_plus` / `striking_distance` rows from `/content-radar`, or `position` 11–20 keywords from `/rankings`.
 - It pulls the page's GSC queries and rewrites for the terms it already half-ranks for — the fastest path to page 1.
-- If it returns an async job id, poll `GET /jobs/{id}` until `completed`.
-- For decaying articles that already rank, use `/content-refresh` instead.
+- Async → returns `{ optimizationId }`. Poll `GET /api/v1/optimizations/{optimizationId}` until `rewriteStatus` is `ready` — then `rewrittenPostId` is the finished, publishable optimized article (open `rewrittenArticle.dashboardUrl`, or fetch full content via `/posts` / the article endpoint). `rewriteStatus: rewriting` = still working; `failed` = read `rewriteError`.
+- The response also carries the analysis (`score`, `suggestions`) — but you don't need to apply anything; the rewrite already fixed the gaps.
+- Decaying articles that already rank are also handled here — optimize refreshes them in place.
+
+```bash
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/optimizations/OPTIMIZATION_ID | jq '{status, rewriteStatus, rewrittenPostId, rewrittenArticle}'
+```

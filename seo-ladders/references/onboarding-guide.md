@@ -47,4 +47,4 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ## Then
 
-Run the loop: `/seo-ladders` (orientation) → `/gsc-audit` + `/content-radar` (audit first) → `/ai-visibility` (the differentiator) → `/prompts` → `/keyword-research` → `/write-article` → `/optimize` / `/content-refresh` → `/actions`.
+Run the loop: `/seo-ladders` (orientation) → `/gsc-audit` + `/content-radar` (audit first) → `/ai-visibility` (the differentiator) → `/prompts` → `/keyword-research` → `/write-article` → `/optimize` → `/actions`.

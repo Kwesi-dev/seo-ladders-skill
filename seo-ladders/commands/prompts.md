@@ -38,3 +38,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 - `added` went in; `skipped` did not.
 - If `remaining` is 0, new prompts come back in **`skipped`**. Tell the user they're at cap — to swap, deactivate/remove a low-value prompt on the dashboard first, then re-add.
 - Prioritize high-intent buyer questions where `/ai-visibility` shows you're absent.
+
+## Organize prompts under topics
+
+`POST /prompts` above adds to your flat, product-wide prompt list. To attach prompts to a **topic** — so a cluster covers both its keywords (Google) and its prompts (AI answers) — use `/topical-authority`'s prompt actions instead: `POST /topics/TOPIC_ID/prompts`. Same cap, but scoped to the topic. Suggestions from `/prompts/explorer` above feed either path.

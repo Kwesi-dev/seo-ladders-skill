@@ -38,6 +38,6 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ## What to do with the result
 
 - Save `htmlContent` to a `.html` file (it's self-contained), or `articleMarkdown` to `.md` — both are publish-ready.
-- The article already ships with internal links, AI images, YouTube embeds, citations, and 1–2 backlink-exchange links (when available) — check exchange targets with `/backlinks`.
+- The article already ships with internal links, AI images, YouTube embeds, and citations.
 - To push it live, use `/publish <article-id>` (or it auto-publishes if you enabled auto-publish).
 - Pro includes 20 articles/mo. Write for keywords from `/keyword-research` and gaps from `/ai-visibility`.

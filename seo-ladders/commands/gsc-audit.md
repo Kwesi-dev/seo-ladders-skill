@@ -36,4 +36,4 @@ Returns `{ audit: {id, status, health_score, total_issues, total_pages_crawled, 
 ## What to do with the result
 
 - Report `health_score`, `total_issues`, `total_pages_crawled`.
-- Audit **before** writing anything. Pair with `/content-radar` to route pages to refresh vs optimize. See `references/audit-playbook.md`.
+- Audit **before** writing anything. Pair with `/content-radar` to route pages to optimize. See `references/audit-playbook.md`.

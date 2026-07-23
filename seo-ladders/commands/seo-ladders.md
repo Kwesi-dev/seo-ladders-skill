@@ -15,8 +15,8 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer on ChatGPT/Perplexity/Gemini/Claude/Google AI?
 5. **Track the right prompts** (`/prompts`) — add buyer questions, including GSC-derived ones; respect the cap.
 6. **Research keywords** (`/keyword-research`) — pick keywords your domain rating can win.
-7. **Write + publish** (`/write-article`) — with internal links + 1–2 backlink-exchange links.
-8. **Optimize + refresh** (`/optimize`, `/content-refresh`) — page-2 pages and decaying articles.
+7. **Write + publish** (`/write-article`) — with internal links.
+8. **Optimize** (`/optimize`) — page-2, declining, and stale pages (it also refreshes in place).
 9. **Act on recommendations** (`/actions`) — outreach, Reddit, content gaps from real monitoring data.
 
 ## What to do with the result

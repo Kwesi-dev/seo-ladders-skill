@@ -37,18 +37,17 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 | Bucket | Meaning | Route to |
 |---|---|---|
-| `declining` | Losing position over time (`positionDrop`) | **refresh** |
+| `declining` | Losing position over time (`positionDrop`) | **optimize** |
 | `striking_distance` | Just off page 1 — a nudge wins it | **optimize** |
 | `low_ctr` | Ranks fine, few clicks — title/meta problem | **optimize** |
 | `page_two_plus` | Buried on page 2+ | **optimize** |
-| `underperforming` | Impressions without matching clicks/position | refresh or optimize (read `action`) |
+| `underperforming` | Impressions without matching clicks/position | optimize (read `action`) |
 
-Trust the **`action`** field — it's the verdict: `refresh` or `optimize`.
+Trust the **`action`** field — it's the verdict: `optimize` or `recommend`.
 
 ## Step 3 — Route the work
 
-- **`action: refresh`** → article already ranks but is decaying → `/content-refresh` (or `POST /refreshes`). Confirm with `GET /refresh-candidates`.
-- **`action: optimize`** → page-2 / low-CTR page that never broke through → `/optimize` (`POST /optimizations {url}`). It rewrites using the page's real GSC queries.
+- **`action: optimize`** → page-2 / low-CTR / decaying page → `/optimize` (`POST /optimizations {url}`). It rewrites using the page's real GSC queries, and refreshes articles that already rank in place.
 
 Prioritize: biggest `positionDrop` in `declining` (stop the bleeding), then `striking_distance` (fastest wins), then `low_ctr` (cheap title/meta fixes), then `page_two_plus`.
 
@@ -58,8 +57,8 @@ With the site healthy and existing pages routed, write into the gaps:
 
 - `/rankings competitor.com` → keywords rivals own that you don't.
 - `/keyword-research <seed>` → winnable, DR-matched keywords.
-- `/write-article <keyword>` → publish, with internal + backlink-exchange links.
+- `/write-article <keyword>` → publish, with internal links.
 
 ## The rule
 
-Refresh and optimize what you already have **before** writing new. Existing pages with impressions are the cheapest, fastest gains — a page in striking distance beats a brand-new article every time.
+Optimize what you already have **before** writing new. Existing pages with impressions are the cheapest, fastest gains — a page in striking distance beats a brand-new article every time.

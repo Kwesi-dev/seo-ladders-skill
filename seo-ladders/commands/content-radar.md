@@ -1,6 +1,6 @@
 # /content-radar
 
-Pull every page from Google Search Console, flag what's declining/stuck/buried, and route each to refresh or optimize. Needs GSC.
+Pull every page from Google Search Console, flag what's declining/stuck/buried, and route each to optimize. Needs GSC.
 
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
@@ -19,10 +19,9 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   - `page_two_plus` — buried on page 2+.
   - `underperforming` — impressions without the clicks/position to match.
 - **`action`** — the verdict:
-  - `refresh` — a decaying article *we* generated → update it in place (`/content-refresh`, by `blogPostId`).
-  - `optimize` — an article to rewrite from GSC data (`/optimize`). Covers articles *we* generated (by `blogPostId`) **and pre-join blogs/articles you wrote before joining** (by the page `url`).
+  - `optimize` — an article to rewrite from GSC data (`/optimize`). Covers articles *we* generated (by `blogPostId`) **and pre-join blogs/articles you wrote before joining** (by the page `url`), including decaying articles that already rank — optimize refreshes them in place.
   - `recommend` — a **non-article page** (e.g. `/pricing`, `/features`, `/docs`, a landing page) that can't be sensibly rewritten as an article → fetch a manual improvement checklist (below).
-- **`source`** — `internal` (we generated it) vs `external` (pre-join / not ours). Articles get refresh/optimize either way; only non-article pages get `recommend`.
+- **`source`** — `internal` (we generated it) vs `external` (pre-join / not ours). Articles get optimized either way; only non-article pages get `recommend`.
 
 > **Homepage is excluded.** The root/homepage (e.g. `https://site.com/`) is left out of the radar automatically — it's a brand/navigational page that ranks for brand terms, not actionable content. If a user asks why their homepage isn't listed, that's why; it's not a bug.
 
@@ -41,6 +40,6 @@ Returns `{ recommendations: [{ title, detail, priority }] }` — specific on-pag
 
 ## What to do with the result
 
-- `refresh` → `/content-refresh`; `optimize` → `/optimize`; `recommend` → fetch the checklist above and walk the user through the fixes.
+- `optimize` → `/optimize`; `recommend` → fetch the checklist above and walk the user through the fixes.
 - Prioritize `declining` with the largest `positionDrop` and `striking_distance` (fastest wins).
 - This is the audit-first flow. See `references/audit-playbook.md`.
