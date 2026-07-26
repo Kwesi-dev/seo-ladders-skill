@@ -1,4 +1,4 @@
-# /seo-ladders-setup
+# /seoladders-setup
 
 Verify the API key works, confirm the website + Google Search Console are connected, and list the user's sites.
 

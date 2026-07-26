@@ -22,7 +22,7 @@ This is the full loop the skill runs (and walks you through the first time it lo
 10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
 11. **Get cited** (`/get-cited`) — the pages AI cites for your prompts, classified by motion, with drafted, ready-to-send outreach. You review and send; never auto-sent.
 
-Full setup walkthrough: `seo-ladders/references/onboarding-guide.md`.
+Full setup walkthrough: `seoladders/references/onboarding-guide.md`.
 
 ---
 
@@ -40,7 +40,7 @@ The same `sk_live_...` key works for both. Set it up for your app:
 **1) Install the skill** — the understanding + slash commands:
 
 ```bash
-npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
+npx skills add Kwesi-dev/seo-ladders-skill/seoladders
 ```
 
 **2) Connect the MCP server** — the tools. Add to your MCP config:
@@ -48,7 +48,7 @@ npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 ```json
 {
   "mcpServers": {
-    "seo-ladders": {
+    "seoladders": {
       "type": "http",
       "url": "https://www.seoladders.com/api/mcp",
       "headers": { "Authorization": "Bearer sk_live_..." }
@@ -57,7 +57,7 @@ npx skills add Kwesi-dev/seo-ladders-skill/seo-ladders
 }
 ```
 
-Then type `/seo-ladders-setup` to confirm everything's connected.
+Then type `/seoladders-setup` to confirm everything's connected.
 
 ### Claude app  (web + desktop)
 
@@ -65,19 +65,19 @@ Add it as a **Skill**. You upload a small `.zip` of the skill folder — here's 
 
 **Step 1 — get the skill folder**
 
-On this repo's GitHub page, click the green **Code** button → **Download ZIP**, then unzip it. Inside you'll find a folder called **`seo-ladders`** (it holds `SKILL.md`, `commands/`, and `references/`).
+On this repo's GitHub page, click the green **Code** button → **Download ZIP**, then unzip it. Inside you'll find a folder called **`seoladders`** (it holds `SKILL.md`, `commands/`, and `references/`).
 
-**Step 2 — zip just the `seo-ladders` folder**
+**Step 2 — zip just the `seoladders` folder**
 
-- **Mac:** right-click the `seo-ladders` folder → **Compress "seo-ladders"** → you get `seo-ladders.zip`.
-- **Windows:** right-click the `seo-ladders` folder → **Send to → Compressed (zipped) folder**.
+- **Mac:** right-click the `seoladders` folder → **Compress "seoladders"** → you get `seoladders.zip`.
+- **Windows:** right-click the `seoladders` folder → **Send to → Compressed (zipped) folder**.
 
-> Zip the **`seo-ladders` folder itself** (the one with `SKILL.md` inside) — not the whole repo.
+> Zip the **`seoladders` folder itself** (the one with `SKILL.md` inside) — not the whole repo.
 
 **Step 3 — upload it to Claude**
 
 1. **Customize → Skills → +** (add a personal skill).
-2. Upload `seo-ladders.zip`.
+2. Upload `seoladders.zip`.
 3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
 4. Provide your API key when asked.
 
@@ -96,7 +96,7 @@ Build a **Custom GPT** that calls the API:
 
 1. **Create a GPT → Configure → Actions → Import from URL** → `https://www.seoladders.com/api/openapi.json`
 2. **Authentication → API Key → Bearer** → paste your `sk_live_...`
-3. Paste `seo-ladders/SKILL.md` into the GPT's **Instructions** (this gives it the process + commands).
+3. Paste `seoladders/SKILL.md` into the GPT's **Instructions** (this gives it the process + commands).
 4. Ask it to "check my AI visibility", "audit my site", or "write an article for &lt;keyword&gt;" — it runs the real calls.
 
 > **Per-user keys:** a *published* GPT with API-Key auth uses one key for everyone. So each user should create their **own** Custom GPT with their own key — or, on ChatGPT Pro/Business, add the MCP server (`/api/mcp`) as a custom connector (per-user auth).
@@ -124,10 +124,12 @@ They're complementary, not either/or — add **both** so Claude *understands* SE
 
 ## Slash Commands
 
+Run any command by name — e.g. `/get-cited`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:get-cited`, `/seoladders:gsc-audit`). Both forms invoke the same command.
+
 | Command | What it does |
 |---|---|
-| `/seo-ladders` | Overview, account status, and the proper AI-SEO process |
-| `/seo-ladders-setup` | Check the API key + what's connected (CMS / GSC), list your sites |
+| `/seoladders` | Overview, account status, and the proper AI-SEO process |
+| `/seoladders-setup` | Check the API key + what's connected (CMS / GSC), list your sites |
 | `/ai-visibility` | AI-visibility score across engines (+ sub-views: citations, sentiment, sources) |
 | `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
@@ -146,7 +148,7 @@ They're complementary, not either/or — add **both** so Claude *understands* SE
 | `/posts` | Your generated/published articles — content inventory (avoid re-covering topics) |
 | `/knowledge` | List/add knowledge facts that ground article writing (optional — site is already scraped) |
 
-Command files live in `seo-ladders/commands/`. If they're not auto-registered by your installer, run `/seo-ladders-setup` or copy `commands/*.md` into your project's `.claude/commands/` folder.
+Command files live in `seoladders/commands/`. If they're not auto-registered by your installer, run `/seoladders-setup` or copy `commands/*.md` into your project's `.claude/commands/` folder.
 
 ## Plans
 
@@ -155,7 +157,7 @@ Command files live in `seo-ladders/commands/`. If they're not auto-registered by
 | **Pro (trial)** | 3-day free trial | Full access to everything below |
 | **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · site audits · auto-publish |
 
-The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `seo-ladders/references/plans-and-backlinks.md` for detail.
+The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `seoladders/references/plans-and-backlinks.md` for detail.
 
 ## Commands (raw API)
 
@@ -204,7 +206,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
   -d '{"enabled":true}' https://www.seoladders.com/api/v1/settings/auto-publish | jq '{autoPublish, message}'
 ```
 
-Full endpoint reference + every command's curl lives in `seo-ladders/SKILL.md`. The MCP server exposes a tool for each of these — same capabilities, auto-discovered.
+Full endpoint reference + every command's curl lives in `seoladders/SKILL.md`. The MCP server exposes a tool for each of these — same capabilities, auto-discovered.
 
 ## AI Visibility (the differentiator)
 
@@ -216,14 +218,14 @@ This is what classic "AI SEO" skills don't do. On a schedule (and on demand from
 - **Citations** — the sources AI pulls from (earn links where `owned:false`)
 - **Content gaps** — buyer questions where AI doesn't name you → write those next (`/content-gaps`)
 
-Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/ai-visibility/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seo-ladders/references/ai-visibility-playbook.md`.
+Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/ai-visibility/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seoladders/references/ai-visibility-playbook.md`.
 
 ## References
 
-- `seo-ladders/references/ai-visibility-playbook.md` — grow how AI recommends you
-- `seo-ladders/references/audit-playbook.md` — the audit-first workflow
-- `seo-ladders/references/onboarding-guide.md` — first-run setup + API key
-- `seo-ladders/references/plans-and-backlinks.md` — plan detail
+- `seoladders/references/ai-visibility-playbook.md` — grow how AI recommends you
+- `seoladders/references/audit-playbook.md` — the audit-first workflow
+- `seoladders/references/onboarding-guide.md` — first-run setup + API key
+- `seoladders/references/plans-and-backlinks.md` — plan detail
 
 ## Community
 

@@ -1,4 +1,4 @@
-# /seo-ladders
+# /seoladders
 
 Overview + the proper AI-SEO process. Confirm the key works and list the user's sites.
 
@@ -22,7 +22,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ## What to do with the result
 
 - Show the sites and their domains; ask which one to work on (pass `?site=<domain>` on later calls).
-- If `count` is 0 → onboarding isn't finished. Send the user to `/seo-ladders-setup`.
-- **401 unauthorized** → bad/missing key; run `/seo-ladders-setup`.
+- If `count` is 0 → onboarding isn't finished. Send the user to `/seoladders-setup`.
+- **401 unauthorized** → bad/missing key; run `/seoladders-setup`.
 - **402 subscription_required** → surface `action.url` verbatim so they can start a plan/trial.
 - Lead with AI visibility — it's the differentiator. After listing sites, suggest `/ai-visibility`.

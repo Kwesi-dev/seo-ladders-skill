@@ -1,5 +1,5 @@
 ---
-name: seo-ladders
+name: seoladders
 version: 2.0.0
 description: The complete AI-search + SEO skill. Track and grow how AI engines (ChatGPT, Perplexity, Gemini, Claude, Google AI) recommend your brand — then audit your site, find keywords you can win, write and publish full articles, and optimize decaying pages. Works as a no-install skill (curl + jq) or over MCP.
 author: SEO Ladders
@@ -55,10 +55,12 @@ The first time this skill loads, walk the user through the proper process below:
 
 ## Slash Commands
 
+Run any command by name — e.g. `/get-cited`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:get-cited`, `/seoladders:gsc-audit`). Both forms invoke the same command.
+
 | Command | What it does |
 |---|---|
-| `/seo-ladders` | Overview, account status, and the proper AI-SEO process |
-| `/seo-ladders-setup` | Check the API key, confirm website + GSC are connected, list your sites |
+| `/seoladders` | Overview, account status, and the proper AI-SEO process |
+| `/seoladders-setup` | Check the API key, confirm website + GSC are connected, list your sites |
 | `/ai-visibility` | Your AI-visibility score across engines — mentions, share-of-voice, sentiment, citations (+ sub-views: citations, sentiment, sources) |
 | `/content-gaps` | Buyer questions where AI doesn't name you — write/schedule them, and mark gaps done (or reopen) |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
@@ -78,7 +80,7 @@ The first time this skill loads, walk the user through the proper process below:
 | `/posts` | Your generated/published articles — content inventory (avoid re-covering topics) |
 | `/knowledge` | List/add knowledge facts that ground article writing (optional — site is already scraped) |
 
-Command files live in `commands/`. If they're not auto-registered by your installer, run `/seo-ladders-setup` or copy `commands/*.md` into your project's `.claude/commands/` folder.
+Command files live in `commands/`. If they're not auto-registered by your installer, run `/seoladders-setup` or copy `commands/*.md` into your project's `.claude/commands/` folder.
 
 ## Plans
 
@@ -290,7 +292,7 @@ Clients that support MCP (Claude Code, Cursor, Windsurf, Codex) can skip curl an
 ```json
 {
   "mcpServers": {
-    "seo-ladders": {
+    "seoladders": {
       "type": "http",
       "url": "https://www.seoladders.com/api/mcp",
       "headers": { "Authorization": "Bearer sk_live_..." }

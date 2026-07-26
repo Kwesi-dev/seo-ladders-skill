@@ -20,5 +20,5 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ## What to do with the result
 
 - Sort by `priority` and present the top 3–5 with their `body`.
-- Route each: `content` → `/write-article`, `setup` → `/seo-ladders-setup`, `outreach`/`reddit` → hand the user the target + angle from `body`.
+- Route each: `content` → `/write-article`, `setup` → `/seoladders-setup`, `outreach`/`reddit` → hand the user the target + angle from `body`.
 - These actions are how you close the gaps `/ai-visibility` surfaces. See `references/ai-visibility-playbook.md`.
