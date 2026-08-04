@@ -12,6 +12,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ```
 
 - Returns `{ tracked, ignored, suggestions: [{name,count}], slots: {used, cap, remaining} }`.
+- `tracked` is **domain-first** — a competitor stored with a known domain comes back as `jasper.ai`, one only ever seen as a brand name comes back as that name.
 - `suggestions` are ranked by how often AI named them — the best ones to promote.
 - `slots.remaining` is how many more you can add (cap is 5).
 
@@ -24,7 +25,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/competitors | jq '{added, skipped, slots}'
 ```
 
-- Body: `{ name: string }` or `{ names: string[] }`.
+- Body: `{ name: string }` or `{ names: string[] }`. Either form works — a domain (`jasper.ai`) or a brand name (`Jasper`). They're matched on the same identity, so adding one after the other returns `already_tracked` rather than burning a second slot. Removal accepts either form too.
 - Over the 5-slot cap → the extras come back in `skipped` with `reason: "cap_reached"`; already-tracked ones come back as `already_tracked`.
 
 ## Remove a competitor (free up a slot)
