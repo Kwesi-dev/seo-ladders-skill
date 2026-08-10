@@ -20,7 +20,7 @@ This is the full loop the skill runs (and walks you through the first time it lo
 8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, and citations.
 9. **Optimize** pages stuck on page 2+, declining, or going stale (`/optimize`) — it also refreshes content in place.
 10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
-11. **Get cited** (`/get-cited`) — the pages AI cites for your prompts, classified by motion, with drafted, ready-to-send outreach. You review and send; never auto-sent.
+11. **Link building** (`/link-building`) — the pages AI cites for your prompts, quality-scored, with a discovered contact and a drafted, ready-to-send pitch. You review and send; never auto-sent.
 
 Full setup walkthrough: `seoladders/references/onboarding-guide.md`.
 
@@ -124,7 +124,7 @@ They're complementary, not either/or — add **both** so Claude *understands* SE
 
 ## Slash Commands
 
-Run any command by name — e.g. `/get-cited`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:get-cited`, `/seoladders:gsc-audit`). Both forms invoke the same command.
+Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:link-building`, `/seoladders:gsc-audit`). Both forms invoke the same command.
 
 | Command | What it does |
 |---|---|
@@ -134,11 +134,13 @@ Run any command by name — e.g. `/get-cited`, `/ai-visibility`. If your app nam
 | `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
-| `/get-cited` | Pages AI cites for your prompts, classified by motion, with drafted outreach — list, find/refresh, update, follow-up |
+| `/link-building` | Pages AI cites for your prompts, quality-scored, with a contact and a drafted pitch — list, find/refresh, update, follow-up |
 | `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
 | `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
+| `/search-console` | Raw GSC rows — the queries or pages you actually rank for, with clicks, impressions, CTR, position |
+| `/indexing` | Which pages Google actually knows about — sitemap vs crawl vs impressions, and Google's own verdict (quota-gated) |
 | `/keyword-research [seed]` | Keyword ideas — manual (give a seed) or "find keywords for me" (auto, DR-matched) |
 | `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
 | `/write-article <keyword>` | Research, write, link, and publish one article |

@@ -51,11 +51,11 @@ The first time this skill loads, walk the user through the proper process below:
 8. **Write and publish** (`/write-article`) — full research → draft → media → FAQ → citations → schema. Every article ships with internal links, AI images, YouTube embeds, and citations.
 9. **Optimize** — rewrite page-2 / declining / stale pages from GSC data (`/optimize`); it also refreshes content in place.
 10. **Act on recommendations** (`/actions`) — outreach, Reddit, and content-gap actions drawn from your real monitoring data.
-11. **Get cited** (`/get-cited`) — turn the pages AI cites for your prompts into drafted, ready-to-send outreach (publisher pitch, community reply, review-request, creator pitch). You review and send; never auto-sent.
+11. **Link building** (`/link-building`) — turn the pages AI cites for your prompts into quality-scored prospects with a discovered contact and a drafted, ready-to-send pitch (publisher pitch, forum reply, review request). You review and send; never auto-sent.
 
 ## Slash Commands
 
-Run any command by name — e.g. `/get-cited`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:get-cited`, `/seoladders:gsc-audit`). Both forms invoke the same command.
+Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:link-building`, `/seoladders:gsc-audit`). Both forms invoke the same command.
 
 | Command | What it does |
 |---|---|
@@ -65,11 +65,13 @@ Run any command by name — e.g. `/get-cited`, `/ai-visibility`. If your app nam
 | `/content-gaps` | Buyer questions where AI doesn't name you — write/schedule them, and mark gaps done (or reopen) |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
-| `/get-cited` | Pages AI cites for your prompts, classified by motion, with drafted outreach — list, find/refresh, update status, draft follow-up |
+| `/link-building` | Pages AI cites for your prompts, quality-scored, with a contact and a drafted pitch — list, find/refresh, update status, draft follow-up |
 | `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
 | `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
+| `/search-console` | Raw GSC rows — the queries or pages you actually rank for, with clicks, impressions, CTR, position |
+| `/indexing` | Which pages Google actually knows about — sitemap vs crawl vs impressions, and Google's own verdict (quota-gated) |
 | `/keyword-research [seed]` | Keyword ideas with volume, difficulty, DR-match — manual (give a seed) or "find keywords for me" (auto) |
 | `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
 | `/topical-authority` | Build topic clusters and track coverage (covered / planned / gap) — research, add and fill keywords **and track the AI prompts** under a pillar topic |
@@ -164,9 +166,9 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/actions | jq '.actions[] | {type, priority, title}'
 
-# Get Cited — pages AI cites for you, classified by motion, with drafted outreach
+# Link Building — pages AI cites for you, quality-scored, with a contact and a drafted pitch
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/get-cited | jq '.targets[] | {motion, source_title, dr, status}'
+  https://www.seoladders.com/api/v1/link-building | jq '.targets[] | {motion, source_title, dr, quality_score, status}'
 
 # Competitors you track (5 slots) — tracked + AI-named suggestions
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
