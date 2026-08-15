@@ -49,18 +49,25 @@ Claude clones the repo, zips the right folder and hands the file back to downloa
 
 Then upload it — **Customize → Skills → +** (on some versions **Settings → Capabilities → Skills → Upload skill**), pick the zip, and provide your API key when asked. It appears under **Personal skills** with a *slash command + auto* trigger, so Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit` and the rest.
 
-**Option B — build the zip yourself**
+**Option B — make the zip yourself**
 
-<details>
-<summary>If you'd rather not go through Claude</summary>
+**Step 1 — get the skill folder**
 
-1. On this repo's GitHub page: green **Code** button → **Download ZIP**, then unzip it.
-2. Inside is a folder called **`seoladders`** (it holds `SKILL.md`, `commands/` and `references/`). Zip **that folder itself** — Mac: right-click → **Compress "seoladders"**; Windows: right-click → **Send to → Compressed (zipped) folder**.
-3. Upload `seoladders.zip` as above.
+On this repo's GitHub page, click the green **Code** button → **Download ZIP**, then unzip it. Inside you'll find a folder called **`seoladders`** (it holds `SKILL.md`, `commands/`, and `references/`).
 
-> Zip the **`seoladders` folder**, the one with `SKILL.md` directly inside it — not the whole repo. This is the single most common reason an upload is rejected.
+**Step 2 — zip just the `seoladders` folder**
 
-</details>
+- **Mac:** right-click the `seoladders` folder → **Compress "seoladders"** → you get `seoladders.zip`.
+- **Windows:** right-click the `seoladders` folder → **Send to → Compressed (zipped) folder**.
+
+> Zip the **`seoladders` folder itself** (the one with `SKILL.md` inside) — not the whole repo.
+
+**Step 3 — upload it to Claude**
+
+1. **Customize → Skills → +** (add a personal skill).
+2. Upload `seoladders.zip`.
+3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
+4. Provide your API key when asked.
 
 **Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
 
