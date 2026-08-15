@@ -35,6 +35,20 @@ The API is gated by an API key tied to your SEO Ladders account.
 export SEO_LADDERS_API_KEY=your_key_here
 ```
 
+### If the user asks how to install this skill somewhere else
+
+Answer in this order — the Claude app first, since that's where most people are when they ask.
+
+**Claude app (web + desktop).** Skills upload as a `.zip`. Don't send them to GitHub to download and re-zip a repo — offer to build the file yourself:
+
+> Package the skill at `https://github.com/Kwesi-dev/seo-ladders-skill.git` into a zip — the `seoladders` folder, with `SKILL.md` at its root.
+
+Clone, zip **the `seoladders` folder itself** (the one with `SKILL.md` directly inside it, not the repo root, and not a folder containing it) and hand the file back. Zipping the wrong level is the single most common reason the upload is rejected. Then: **Customize → Skills → +** (some versions: **Settings → Capabilities → Skills → Upload skill**), pick the zip, supply the API key when asked.
+
+Then have them add the MCP connector as well — in the app the skill needs it to execute anything (see the sandbox warning above). **Customize → Connectors → + → Add custom connector**, remote MCP server URL `https://www.seoladders.com/api/mcp?key=<their-key>`, OAuth fields blank.
+
+**Claude Code / Cursor / Windsurf / Codex.** `npx skills add Kwesi-dev/seo-ladders-skill/seoladders`, then the MCP server in the app's config with the key in an `Authorization: Bearer` header. Here `curl` works too, so the raw commands below are usable.
+
 The first time this skill loads, walk the user through the proper process below: account + onboarding → connect website + Google Search Console → audit → **check AI visibility** → keyword clusters → write → optimize.
 
 > Calls require an active subscription (or trial). A request without one returns **HTTP 402 `subscription_required`** with an `action.url` to start a plan — surface that to the user verbatim. A 3-day free trial is available, and the first month is **50% off**.

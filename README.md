@@ -35,6 +35,42 @@ For the best experience, do **both** — in whatever app you use:
 
 The same `sk_live_...` key works for both. Set it up for your app:
 
+### Claude app  (web + desktop)
+
+Add it as a **Skill**. The app uploads skills as a small `.zip`, and there are two ways to get one — the first never sends you to GitHub.
+
+**Option A — ask Claude to package it (easiest)**
+
+Paste this into any Claude conversation:
+
+> Package the skill at https://github.com/Kwesi-dev/seo-ladders-skill.git into a zip I can upload — the `seoladders` folder, with `SKILL.md` at its root.
+
+Claude clones the repo, zips the right folder and hands the file back to download. That's the only download involved: no visiting GitHub, no unzipping a whole repo, and no risk of zipping the wrong level — which is the mistake that makes the upload fail.
+
+Then upload it — **Customize → Skills → +** (on some versions **Settings → Capabilities → Skills → Upload skill**), pick the zip, and provide your API key when asked. It appears under **Personal skills** with a *slash command + auto* trigger, so Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit` and the rest.
+
+**Option B — build the zip yourself**
+
+<details>
+<summary>If you'd rather not go through Claude</summary>
+
+1. On this repo's GitHub page: green **Code** button → **Download ZIP**, then unzip it.
+2. Inside is a folder called **`seoladders`** (it holds `SKILL.md`, `commands/` and `references/`). Zip **that folder itself** — Mac: right-click → **Compress "seoladders"**; Windows: right-click → **Send to → Compressed (zipped) folder**.
+3. Upload `seoladders.zip` as above.
+
+> Zip the **`seoladders` folder**, the one with `SKILL.md` directly inside it — not the whole repo. This is the single most common reason an upload is rejected.
+
+</details>
+
+**Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
+
+1. **Customize → Connectors → + → Add custom connector**.
+2. **Name:** `SEO Ladders`
+3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp?key=sk_live_...` — put your key right in the URL. The web dialog has no header field, so the key goes here. (It's your own key, stored in your own connector settings.)
+4. Leave the OAuth fields blank → **Add**.
+
+> The **Skill** gives Claude the process; the **MCP connector** gives it execution. In the Claude app you want **both**. (In Claude Code / Cursor you instead put the key in the config `headers` — see below.)
+
 ### Claude Code  (or Cursor / Windsurf / Codex)
 
 **1) Install the skill** — the understanding + slash commands:
@@ -58,37 +94,6 @@ npx skills add Kwesi-dev/seo-ladders-skill/seoladders
 ```
 
 Then type `/seoladders-setup` to confirm everything's connected.
-
-### Claude app  (web + desktop)
-
-Add it as a **Skill**. You upload a small `.zip` of the skill folder — here's how to make it (no command line needed):
-
-**Step 1 — get the skill folder**
-
-On this repo's GitHub page, click the green **Code** button → **Download ZIP**, then unzip it. Inside you'll find a folder called **`seoladders`** (it holds `SKILL.md`, `commands/`, and `references/`).
-
-**Step 2 — zip just the `seoladders` folder**
-
-- **Mac:** right-click the `seoladders` folder → **Compress "seoladders"** → you get `seoladders.zip`.
-- **Windows:** right-click the `seoladders` folder → **Send to → Compressed (zipped) folder**.
-
-> Zip the **`seoladders` folder itself** (the one with `SKILL.md` inside) — not the whole repo.
-
-**Step 3 — upload it to Claude**
-
-1. **Customize → Skills → +** (add a personal skill).
-2. Upload `seoladders.zip`.
-3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
-4. Provide your API key when asked.
-
-**Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
-
-1. **Customize → Connectors → + → Add custom connector**.
-2. **Name:** `SEO Ladders`
-3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp?key=sk_live_...` — put your key right in the URL. The web dialog has no header field, so the key goes here. (It's your own key, stored in your own connector settings.)
-4. Leave the OAuth fields blank → **Add**.
-
-> The **Skill** gives Claude the process; the **MCP connector** gives it execution. In the Claude app you want **both**. (In Claude Code / Cursor you instead put the key in the config `headers` — see above.)
 
 ### ChatGPT
 
