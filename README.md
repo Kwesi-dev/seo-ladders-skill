@@ -20,7 +20,7 @@ This is the full loop the skill runs (and walks you through the first time it lo
 8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, and citations.
 9. **Optimize** pages stuck on page 2+, declining, or going stale (`/optimize`) — it also refreshes content in place.
 10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
-11. **Link building** (`/link-building`) — the pages AI cites for your prompts, quality-scored, with a discovered contact and a drafted, ready-to-send pitch. You review and send; never auto-sent.
+11. **Link building** (`/link-building`) — the pages AI cites for your prompts, plus the pages linking to your competitors and not to you, quality-scored, with a discovered contact and a drafted, ready-to-send pitch. You review and send; never auto-sent.
 
 Full setup walkthrough: `seoladders/references/onboarding-guide.md`.
 
@@ -134,7 +134,7 @@ Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app
 | `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
-| `/link-building` | Pages AI cites for your prompts, quality-scored, with a contact and a drafted pitch — list, find/refresh, update, follow-up |
+| `/link-building` | Pages AI cites for you **and** pages linking to your competitors but not you — quality-scored, with a contact and a drafted pitch; list, find/refresh, update, follow-up |
 | `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
