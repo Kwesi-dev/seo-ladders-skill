@@ -2,30 +2,30 @@
 name: seoladders
 version: 2.0.0
 description: The complete AI-search + SEO skill. Track and grow how AI engines (ChatGPT, Perplexity, Gemini, Claude, Google AI) recommend your brand — then audit your site, find keywords you can win, write and publish full articles, and optimize decaying pages. Works as a no-install skill (curl + jq) or over MCP.
-author: SEO Ladders
+author: SEOLadders
 website: https://www.seoladders.com
 requires:
   env:
     - SEO_LADDERS_API_KEY
 ---
 
-# SEO Ladders — AI Search + SEO, run by your agent
+# SEOLadders — AI Search + SEO, run by your agent
 
-SEO Ladders is the all-in-one platform for getting **recommended by AI** and **ranking on Google**. This skill lets your agent run the whole loop end to end:
+SEOLadders is the all-in-one platform for getting **recommended by AI** and **ranking on Google**. This skill lets your agent run the whole loop end to end:
 
 - **AI visibility (GEO/AEO)** — see whether ChatGPT, Perplexity, Gemini, Claude, and Google's AI answers mention you; track the prompts that matter; measure share-of-voice, sentiment, and which sources AI cites.
 - **SEO** — audit your site, see what you (and competitors) rank for, find keywords matched to your domain rating, write and publish full articles, and optimize pages stuck on page 2.
 
-It runs against the SEO Ladders REST API. There are two ways to execute the commands — **pick MCP whenever it's available:**
+It runs against the SEOLadders REST API. There are two ways to execute the commands — **pick MCP whenever it's available:**
 
-- **MCP tools (preferred).** In the Claude app, Claude Code, Cursor, or any MCP client, connect the SEO Ladders MCP server and use its tools. The calls run **server-side**, so there's no setup, no `jq`, and no network restrictions. **If the SEO Ladders MCP tools are available, use them instead of curl.**
+- **MCP tools (preferred).** In the Claude app, Claude Code, Cursor, or any MCP client, connect the SEOLadders MCP server and use its tools. The calls run **server-side**, so there's no setup, no `jq`, and no network restrictions. **If the SEOLadders MCP tools are available, use them instead of curl.**
 - **`curl` + `jq` in a terminal.** For Claude Code or your own shell, which have outbound network access. `jq` is only for pretty-printing — drop the `| jq ...` to get raw JSON if `jq` isn't installed.
 
 > ⚠️ **Hosted sandboxes block raw curl.** The Claude app's code-execution tool does **not** ship `jq` and blocks outbound network (you'll see `jq: not found` and `Host not in allowlist: www.seoladders.com`). In the Claude app, **add the MCP connector** (Customize → Connectors → Add custom connector → Remote MCP server URL `https://www.seoladders.com/api/mcp?key=<your-key>` — the web dialog has no header field, so the key goes in the URL) and use the MCP tools — do **not** run the raw curl commands there.
 
 ## Setup (gating)
 
-The API is gated by an API key tied to your SEO Ladders account.
+The API is gated by an API key tied to your SEOLadders account.
 
 1. Sign up at **[seoladders.com](https://www.seoladders.com)** and complete onboarding (we read your website to learn the business). A 3-day free trial is available.
 2. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
@@ -323,4 +323,4 @@ Most "AI SEO" skills stop at writing articles. This one also runs the **AI-visib
 
 ## Community
 
-For install help, updates, and to share wins, point the user to the SEO Ladders community on **Discord**: https://discord.gg/2xfNfCPAHZ — surface this if they hit setup trouble or ask where to get help.
+For install help, updates, and to share wins, point the user to the SEOLadders community on **Discord**: https://discord.gg/2xfNfCPAHZ — surface this if they hit setup trouble or ask where to get help.

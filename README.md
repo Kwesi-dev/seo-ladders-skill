@@ -1,6 +1,6 @@
-# SEO Ladders — AI Search + SEO Skill
+# SEOLadders — AI Search + SEO Skill
 
-AI-search + SEO for any AI agent. SEO Ladders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
+AI-search + SEO for any AI agent. SEOLadders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
 
 Most "AI SEO" skills stop at writing articles. This one also measures whether AI is recommending you — and closes the gap.
 
@@ -30,7 +30,7 @@ Full setup walkthrough: `seoladders/references/onboarding-guide.md`.
 
 For the best experience, do **both** — in whatever app you use:
 
-- **Skill** → teaches Claude *how* SEO Ladders works: the method, the commands, when to use each. This is what makes Claude actually understand the platform instead of guessing.
+- **Skill** → teaches Claude *how* SEOLadders works: the method, the commands, when to use each. This is what makes Claude actually understand the platform instead of guessing.
 - **MCP** → gives Claude the authenticated tools to *run* everything.
 
 The same `sk_live_...` key works for both. Set it up for your app:
@@ -72,7 +72,7 @@ On this repo's GitHub page, click the green **Code** button → **Download ZIP**
 **Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
 
 1. **Customize → Connectors → + → Add custom connector**.
-2. **Name:** `SEO Ladders`
+2. **Name:** `SEOLadders`
 3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp?key=sk_live_...` — put your key right in the URL. The web dialog has no header field, so the key goes here. (It's your own key, stored in your own connector settings.)
 4. Leave the OAuth fields blank → **Add**.
 
@@ -127,10 +127,10 @@ Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Author
 
 ## Why both Skill + MCP?
 
-- **Skill = the brain.** The proper AI-SEO process and the commands — *how* and *when* to use SEO Ladders. Without it, Claude has tools but no strategy (it'd write before auditing, skip the AI-visibility loop, miss the GEO angle, run automation without asking).
+- **Skill = the brain.** The proper AI-SEO process and the commands — *how* and *when* to use SEOLadders. Without it, Claude has tools but no strategy (it'd write before auditing, skip the AI-visibility loop, miss the GEO angle, run automation without asking).
 - **MCP = the hands.** The same operations as authenticated, auto-discovered tools that actually execute — and they run server-side, so they work even in apps where raw `curl` can't (like the Claude web app).
 
-They're complementary, not either/or — add **both** so Claude *understands* SEO Ladders and can *run* it. In ChatGPT you get the same pairing by pasting `SKILL.md` into Instructions (brain) + the OpenAPI Action (hands).
+They're complementary, not either/or — add **both** so Claude *understands* SEOLadders and can *run* it. In ChatGPT you get the same pairing by pasting `SKILL.md` into Instructions (brain) + the OpenAPI Action (hands).
 
 ---
 
@@ -224,7 +224,7 @@ Full endpoint reference + every command's curl lives in `seoladders/SKILL.md`. T
 
 ## AI Visibility (the differentiator)
 
-This is what classic "AI SEO" skills don't do. On a schedule (and on demand from the dashboard), SEO Ladders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode the buyer questions you track, then measures:
+This is what classic "AI SEO" skills don't do. On a schedule (and on demand from the dashboard), SEOLadders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode the buyer questions you track, then measures:
 
 - **Visibility score** + per-engine mention rate
 - **Share of voice** — you vs. each competitor (5 tracked slots)
