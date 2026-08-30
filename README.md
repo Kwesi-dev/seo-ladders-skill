@@ -67,16 +67,19 @@ On this repo's GitHub page, click the green **Code** button → **Download ZIP**
 1. **Customize → Skills → +** (add a personal skill).
 2. Upload `seoladders.zip`.
 3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/write-article`, `/gsc-audit`, etc.
-4. Provide your API key when asked.
+4. Sign in when Claude asks — see the connector step below. No key needed in the Claude app.
 
 **Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
 
 1. **Customize → Connectors → + → Add custom connector**.
 2. **Name:** `SEOLadders`
-3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp?key=sk_live_...` — put your key right in the URL. The web dialog has no header field, so the key goes here. (It's your own key, stored in your own connector settings.)
-4. Leave the OAuth fields blank → **Add**.
+3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp` — just the URL, no key.
+4. Under **OAuth client**, pick **No client ID — register one automatically**. Leave the headers section empty → **Add**.
+5. Hit **Connect**. Claude sends you to SEOLadders to sign in and approve access, then connects itself. If you're already signed in it takes one click; otherwise you get the usual magic-link email.
 
-> The **Skill** gives Claude the process; the **MCP connector** gives it execution. In the Claude app you want **both**. (In Claude Code / Cursor you instead put the key in the config `headers` — see below.)
+> No API key is involved in the Claude app. You approve once and every tool runs against your own sites.
+
+> The **Skill** gives Claude the process; the **MCP connector** gives it execution. In the Claude app you want **both**. (In Claude Code / Cursor you connect with a key in the config `headers` — see below.)
 
 ### Claude Code  (or Cursor / Windsurf / Codex)
 
