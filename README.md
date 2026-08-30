@@ -73,9 +73,10 @@ On this repo's GitHub page, click the green **Code** button → **Download ZIP**
 
 1. **Customize → Connectors → + → Add custom connector**.
 2. **Name:** `SEOLadders`
-3. **Remote MCP server URL:** `https://www.seoladders.com/api/mcp` — just the URL, no key.
-4. Under **OAuth client**, pick **No client ID — register one automatically**. Leave the headers section empty → **Add**.
-5. Hit **Connect**. Claude sends you to SEOLadders to sign in and approve access, then connects itself. If you're already signed in it takes one click; otherwise you get the usual magic-link email.
+3. **URL:** `https://www.seoladders.com/api/mcp` — just the URL, no key. → **Continue**.
+4. **Authentication:** leave **Always required** (Claude marks it *Detected*).
+5. **OAuth client:** leave **No client ID — register one automatically** (also *Detected*). Leave the headers section empty.
+6. **Add** → **Connect**. Claude sends you to SEOLadders to sign in and approve access, then connects itself. If you're already signed in it takes one click; otherwise you get the usual magic-link email.
 
 > No API key is involved in the Claude app. You approve once and every tool runs against your own sites.
 

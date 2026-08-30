@@ -21,7 +21,7 @@ It runs against the SEOLadders REST API. There are two ways to execute the comma
 - **MCP tools (preferred).** In the Claude app, Claude Code, Cursor, or any MCP client, connect the SEOLadders MCP server and use its tools. The calls run **server-side**, so there's no setup, no `jq`, and no network restrictions. **If the SEOLadders MCP tools are available, use them instead of curl.**
 - **`curl` + `jq` in a terminal.** For Claude Code or your own shell, which have outbound network access. `jq` is only for pretty-printing — drop the `| jq ...` to get raw JSON if `jq` isn't installed.
 
-> ⚠️ **Hosted sandboxes block raw curl.** The Claude app's code-execution tool does **not** ship `jq` and blocks outbound network (you'll see `jq: not found` and `Host not in allowlist: www.seoladders.com`). In the Claude app, **add the MCP connector** (Customize → Connectors → Add custom connector → Remote MCP server URL `https://www.seoladders.com/api/mcp`, then Connect and sign in — no API key) and use the MCP tools — do **not** run the raw curl commands there.
+> ⚠️ **Hosted sandboxes block raw curl.** The Claude app's code-execution tool does **not** ship `jq` and blocks outbound network (you'll see `jq: not found` and `Host not in allowlist: www.seoladders.com`). In the Claude app, **add the MCP connector** (Customize → Connectors → Add custom connector → name `SEOLadders`, URL `https://www.seoladders.com/api/mcp` → Continue → leave both detected defaults → Add → Connect → sign in; no API key) and use the MCP tools — do **not** run the raw curl commands there.
 
 ## Setup (gating)
 
@@ -45,7 +45,16 @@ Answer in this order — the Claude app first, since that's where most people ar
 
 Clone, zip **the `seoladders` folder itself** (the one with `SKILL.md` directly inside it, not the repo root, and not a folder containing it) and hand the file back. Zipping the wrong level is the single most common reason the upload is rejected. Then: **Customize → Skills → +** (some versions: **Settings → Capabilities → Skills → Upload skill**), pick the zip, supply the API key when asked.
 
-Then have them add the MCP connector as well — in the app the skill needs it to execute anything (see the sandbox warning above). **Customize → Connectors → + → Add custom connector**, remote MCP server URL `https://www.seoladders.com/api/mcp` (no key), OAuth client → **No client ID — register one automatically**, then **Connect** and sign in. Do NOT tell them to paste a key into the URL: the Claude app signs in through SEOLadders, and a key is only needed in clients that set request headers.
+Then have them add the MCP connector as well — in the app the skill needs it to execute anything (see the sandbox warning above). Walk them through it exactly:
+
+1. **Customize → Connectors → + → Add custom connector**
+2. **Name:** `SEOLadders`
+3. **URL:** `https://www.seoladders.com/api/mcp` (no key) → **Continue**
+4. **Authentication:** leave **Always required** — Claude marks it *Detected*
+5. **OAuth client:** leave **No client ID — register one automatically** — also *Detected*. Leave headers empty.
+6. **Add** → **Connect** → sign in and approve
+
+Do NOT tell them to paste a key into the URL, and do NOT tell them to leave the OAuth fields blank: the Claude app signs in through SEOLadders. A key is only needed in clients that set request headers (Claude Code, Cursor, Windsurf) or for the REST API.
 
 **Claude Code / Cursor / Windsurf / Codex.** `npx skills add Kwesi-dev/seo-ladders-skill/seoladders`, then the MCP server in the app's config with the key in an `Authorization: Bearer` header. Here `curl` works too, so the raw commands below are usable.
 
