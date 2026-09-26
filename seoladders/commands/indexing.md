@@ -49,7 +49,7 @@ Calls Google's URL Inspection API on the `never_shown` shortlist and returns **G
 **Always confirm with the user before calling this, and tell them how many URLs you intend to check.**
 
 - The API allows **2,000 checks per day for the entire property** — a shared, limited resource, not a per-agent allowance.
-- `budget` defaults to a small number and is clamped to **500** max. Start small; you can always run again.
+- `budget` defaults to **200** (10% of the daily property quota) and is clamped to **500** max. That default is what gets spent when you omit the argument, so pass a smaller number if you only want a sample.
 - Results are **cached 30 days**, so re-running over the same URLs is cheap.
 - The shortlist is recomputed server-side — you cannot point the quota at a URL list of your own choosing. That's deliberate.
 - `inspection` is always present in the response, so a partial run can never be read as a complete one. Check it before summarising.

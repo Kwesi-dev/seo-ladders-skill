@@ -1,6 +1,6 @@
 # SEOLadders — AI Search + SEO Skill
 
-AI-search + SEO for any AI agent. SEOLadders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, and Google AI actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
+AI-search + SEO for any AI agent. SEOLadders provides the infrastructure: real keyword data matched to your domain rating, a Google Search Console audit, full article writing + CMS publishing, a content calendar — and, uniquely, the **AI-visibility loop**: it measures whether ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode actually recommend your brand, finds the prompts and citation sources that matter, and tells you exactly what to fix.
 
 Most "AI SEO" skills stop at writing articles. This one also measures whether AI is recommending you — and closes the gap.
 
@@ -10,13 +10,13 @@ Most "AI SEO" skills stop at writing articles. This one also measures whether AI
 
 This is the full loop the skill runs (and walks you through the first time it loads). Steps 1–2 are your one-time setup — that's where you create the API key the **Install** section below needs.
 
-1. **Sign up and onboard** at [seoladders.com](https://www.seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A **3-day free trial** is available, and the first month is **50% off**.
-2. **Connect** the two things that matter most: the website/CMS and Google Search Console. Then create your API key at **Dashboard → Developers** (`sk_live_...`).
+1. **Sign up and onboard** at [seoladders.com](https://www.seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A **7-day free trial** is available, and the first month is **50% off**.
+2. **Connect** the two things that matter most: the website/CMS and Google Search Console. Then, *if your client sets request headers* (Claude Code, Cursor, Windsurf, Codex) or you are using raw curl, create an API key on the **MCP & Skill** page at `/dashboard/developers` (`sk_live_...`). The Claude app signs in for you and needs no key.
 3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
 5. **Build topic clusters** (`/topical-authority`) — a pillar topic that holds *both* the keywords to rank for on Google *and* the AI prompts to win in AI answers. Research keywords to fill each cluster (`/keyword-research`), and track the buyer prompts under it.
 6. **Track the right prompts** (`/prompts`) — pull suggestions from your real Google Search Console queries, keywords, or People-Also-Asked, then add the good ones under the relevant topic. Respect the cap; swap low-value prompts when full.
-7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
+7. **Choose how to ship** — either write now (`/write-article`), or schedule the keywords on the content calendar (`/content-calendar`) and leave AutoBlog to generate and publish them. **Autofill and auto-publish are on by default** (auto-publish switches itself on when a CMS is connected). Turn auto-publish *off* if the user wants to approve each article first.
 8. **Write and publish** (`/write-article`). Every article ships with internal links, AI images, YouTube embeds, and citations.
 9. **Optimize** pages stuck on page 2+, declining, or going stale (`/optimize`) — it also refreshes content in place.
 10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
@@ -151,7 +151,7 @@ Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
 | `/link-building` | Pages AI cites for you **and** pages linking to your competitors but not you — quality-scored, with a contact and a drafted pitch; list, find/refresh, update, follow-up |
-| `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
+| `/competitors` | Track competitors for AI share-of-voice (10 slots on Pro, 5 on trial) — list, promote suggestions, add, remove |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
 | `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
@@ -172,8 +172,8 @@ Command files live in `seoladders/commands/`. If they're not auto-registered by 
 
 | Plan | Price | What you get |
 |---|---|---|
-| **Pro (trial)** | 3-day free trial | Full access to everything below |
-| **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · site audits · auto-publish |
+| **Pro (trial)** | 7-day free trial | Full access to everything below |
+| **Pro** | $97/mo, per website — **50% off your first month** | 30 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · site audits · auto-publish |
 
 The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `seoladders/references/plans-and-backlinks.md` for detail.
 
@@ -196,7 +196,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
 
 # Audit (async → poll the job) + Content Radar
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
-  -d '{}' https://www.seoladders.com/api/v1/audit | jq '{jobId, status}'
+  -d '{}' https://www.seoladders.com/api/v1/audit | jq '{auditId, status}'
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/content-radar | jq '.rows[] | {url, bucket, action}'
 
@@ -228,7 +228,7 @@ Full endpoint reference + every command's curl lives in `seoladders/SKILL.md`. T
 
 ## AI Visibility (the differentiator)
 
-This is what classic "AI SEO" skills don't do. On a schedule (and on demand from the dashboard), SEOLadders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode the buyer questions you track, then measures:
+This is what classic "AI SEO" skills don't do. On a schedule (every few days — Pro has no manual runs, so there is nothing to trigger by hand), SEOLadders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode the buyer questions you track, then measures:
 
 - **Visibility score** + per-engine mention rate
 - **Share of voice** — you vs. each competitor (5 tracked slots)

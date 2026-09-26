@@ -8,24 +8,30 @@ Each keyword is scored:
 - **planned** — an article is queued or drafting (on the calendar / unpublished),
 - **gap** — nothing written yet.
 
-A topic's `coverage` rollup (`{ total, covered, planned, gap, coveragePct }`) is how you measure authority on a subject and find what's left to write. Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`.
+A topic returns two different numbers, and they answer different questions.
+
+`coverage` (`{ total, covered, planned, gap, coveragePct }`) is what was **written** for the topic, and finds what's left to write.
+
+`authority` (`{ authority, searchScore, aiScore, stage, evidence }`) is what the topic has **won**: of the articles SEOLadders published for it, how many now rank, plus the share of its tracked prompts whose AI answers name the brand. `stage` runs `planned → published → indexed → ranking → winning → cited` and stays meaningful while a young topic's score is honestly near zero. Pages that existed before the account was created are excluded by construction, so this only ever credits work the platform did.
+
+Coverage can read 100% while authority reads 0 — that means everything planned was written and none of it ranks yet. Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`.
 
 ## List topics
 
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/topics \
-  | jq '{count, topics: [.topics[] | {id, name, coverage}]}'
+  | jq '{count, topics: [.topics[] | {id, name, coverage, authority}]}'
 ```
 
-`topics` — `[{ id, name, description, pillar_post_id, coverage: {total, covered, planned, gap, coveragePct} }]`.
+`topics` — `[{ id, name, description, pillar_post_id, coverage: {total, covered, planned, gap, coveragePct}, authority: {authority, searchScore, aiScore, stage, evidence} }]`.
 
-## Get one topic (keywords + prompts + coverage)
+## Get one topic (keywords + prompts + coverage + authority)
 
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/topics/TOPIC_ID \
-  | jq '{name: .topic.name, coverage, keywords: [.keywords[] | {id, keyword, coverage, searchVolume, keywordDifficulty, intent}], prompts}'
+  | jq '{name: .topic.name, coverage, authority, keywords: [.keywords[] | {id, keyword, coverage, searchVolume, keywordDifficulty, intent}], prompts}'
 ```
 
 - `keywords[]` each carry `coverage` (covered / planned / gap) — the **gaps** are your to-write list.
@@ -133,4 +139,4 @@ curl -s -X DELETE -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 3. **Track prompts** under the topic — the buyer questions you want AI to name you for. Pull suggestions with `/prompts`, then add the good ones to the topic. This is the GEO half of the cluster.
 4. **Get** the topic and read `coverage` — the **gap** keywords are what's left to write, and `prompts` are what AI visibility is tracking for it.
 5. For each gap keyword, hand it to **`/write-article`** to publish content (that flips it planned → covered).
-6. Re-check `coveragePct` and your AI visibility over time to watch the topic fill in on both Google and AI answers.
+6. Re-check `coveragePct` to see the map fill in, and `authority` to see whether it is actually winning. Coverage moves the week an article publishes; authority moves months later, when that article starts ranking and getting cited.

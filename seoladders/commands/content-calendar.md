@@ -24,9 +24,9 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 `keyword` is required. `date`, `status`, `article_type` are optional.
 
-## Turn on autofill (opt-in autopilot)
+## Autofill (on by default)
 
-Let AutoBlog auto-schedule ~a month of DR-matched keywords each cycle, so the calendar never runs dry:
+AutoBlog auto-schedules ~a month of DR-matched keywords each cycle, so the calendar never runs dry:
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
@@ -34,9 +34,16 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/autoblog/autofill | jq .
 ```
 
-Pair it with **auto-publish** (`POST /settings/auto-publish {"enabled":true}`) for fully hands-off generate + ship.
+Auto-publish is likewise on once a CMS is connected, so generate-and-ship is already the
+default path.
 
-**Confirm with the user before enabling** — autofill spends article quota automatically each cycle.
+> **Both of these are ON by default.** Connecting a CMS switches auto-publish on by
+> itself, and autofill ships enabled for every account. Read the current value before
+> saying anything to the user: telling them to "turn on" something already running,
+> or that nothing will publish until they do, is wrong. Review mode is the *switch* —
+> send `{"enabled": false}` to hold articles as drafts for approval. Confirm before
+> CHANGING either setting in either direction.
+
 
 ## What to do with the result
 

@@ -43,5 +43,5 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - Sort by `severity: "missing"` then lowest `brandPct` — write those first.
 - After you write or schedule a gap, **mark it done** (`status: "done"`) so it leaves the list and shows as handled in the Actions kanban. Reopen with `status: "reopen"`.
-- If `hasData: false`, there's no completed monitor run yet — tell the user to run the monitor on the dashboard.
+- If `hasData: false`, there's no completed monitor run yet — the monitor is created for you during onboarding and runs on a schedule (every few days), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
 - Pair with `/ai-visibility` (the score) and `/actions` (outreach to the sources AI cites).

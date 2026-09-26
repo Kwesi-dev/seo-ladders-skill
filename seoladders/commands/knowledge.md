@@ -15,7 +15,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 # A note (raw facts)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"type":"note","title":"Pricing","content":"Pro is $99/mo early-bird, 3-day trial, 2 seats."}' \
+  -d '{"type":"note","title":"Pricing","content":"Pro is $97/mo early-bird, 7-day trial, 5 seats."}' \
   https://www.seoladders.com/api/v1/knowledge | jq '.source | {id, type, status}'
 
 # A URL to ingest

@@ -1,6 +1,6 @@
 # AI Visibility Playbook (GEO / AEO)
 
-This is the differentiator. Most SEO skills stop at writing articles. This one measures and grows whether **AI engines recommend you** — ChatGPT, Perplexity, Gemini, Claude, Google AI — then closes the gap. Run this loop continuously.
+This is the differentiator. Most SEO skills stop at writing articles. This one measures and grows whether **AI engines recommend you** — ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode — then closes the gap. Run this loop continuously.
 
 ## Why it matters
 
@@ -41,7 +41,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 - **`sentiment`** — being mentioned negatively is its own problem; fix the narrative on the sources driving it.
 - **`topCitations`** — the sources AI trusts for these prompts. `owned:false` = an outreach target. `owned:true` = your pages already winning — make more like them.
 
-> `hasData:false` → create a monitor and run it on the dashboard first. No API endpoint writes monitors.
+> `hasData:false` → the monitor is created for you during onboarding and runs on a schedule (every few days), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
 
 ### 3. Earn citations from the sources AI already trusts
 
@@ -49,6 +49,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - Sort `topCitations` by `pct`, filter `owned:false`, attack the top few.
 - `/actions` turns this into concrete `outreach` and `reddit` tasks.
+- `topCitations` is one of three outreach maps, not the whole picture. `/link-building` also finds pages linking to your competitors and not to you, and the best-of lists ranking on page one for your topics. Those two need no monitor, so they are the answer when a user has no AI-visibility run yet and wants prospects today.
 
 ### 4. Write content for the gaps
 
@@ -78,6 +79,6 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ## Cadence
 
 1. Connect GSC → derive prompts → add the high-intent ones (respect cap).
-2. Run the monitor (dashboard) → read `/ai-visibility`.
+2. Wait for the next scheduled run → read `/ai-visibility`.
 3. Each cycle: earn citations on `owned:false` sources, write gap content, work `/actions` by priority.
 4. Re-check `visibilityScore` and `shareOfVoice` — confirm the line is going up, then repeat.

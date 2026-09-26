@@ -1,6 +1,6 @@
 # /ai-visibility
 
-Your visibility across AI engines — whether ChatGPT, Perplexity, Gemini, Claude, and Google AI recommend you. This is the differentiator. Lead with it.
+Your visibility across AI engines — whether all six tracked engines recommend you (ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode). This is the differentiator. Lead with it.
 
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
@@ -19,7 +19,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ## What to do with the result
 
-- **`hasData == false`** → tell the user to **create an AI monitor and run it on the dashboard** (Dashboard → AI Visibility). No API call writes monitors.
+- **`hasData == false`** → the monitor is created for you during onboarding and runs on a schedule (every few days), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
 - Report `visibilityScore`, the weakest engine in `perEngine`, and the top competitor in `shareOfVoice`.
 - Use `topCitations` where `owned:false` as outreach targets — get cited on the sources AI already trusts.
 - Next steps: `/prompts` (track the right buyer questions), `/actions` (act on the gaps). See `references/ai-visibility-playbook.md`.

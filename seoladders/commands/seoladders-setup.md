@@ -10,8 +10,8 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ```
 
 - **200 + projects** → key works.
-- **401 unauthorized** → key is missing or wrong. Tell the user to get one at **Dashboard → Developers** and run `export SEO_LADDERS_API_KEY=sk_live_...`.
-- **402 subscription_required** → surface `action.url` verbatim to start a plan/trial (3-day free trial; first month 50% off).
+- **401 unauthorized** → in the **Claude app**, the connector is not signed in: tell them to reconnect it (there is no key to paste). In a header-setting client or curl, the key is missing or wrong: get one on the **MCP & Skill** page at `/dashboard/developers` and run `export SEO_LADDERS_API_KEY=sk_live_...`.
+- **402 subscription_required** → surface `action.url` verbatim to start a plan/trial (7-day free trial; first month 50% off).
 - **count is 0** → onboarding not finished. Tell them to sign up + connect their website at the dashboard.
 
 ## 2. Check what's connected (one call)
@@ -27,17 +27,20 @@ Returns `{ cms: {type, connected, enabled}, gsc: {connected, siteUrl}, webhook: 
   > Connect Google Search Console at the SEOLadders dashboard. It powers the audit, Content Radar, rankings, and prompt discovery — without it most of this skill runs blind.
 - **`cms.connected: false`** → publishing won't work yet; connect WordPress or a webhook at the dashboard (or generate articles and save them locally for now).
 
-## Offer automations (opt-in)
+## Automations (already on — report, don't offer)
 
-Once setup passes, **suggest** these options — do **not** enable any of them. Act only on an explicit "yes" from the user; each is consequential (spends quota or publishes live).
+Both settings below are **enabled by default**. Once setup passes, GET their current
+values and *tell the user what is already running*. Do not present them as options to
+switch on. If the user wants to slow things down, the change is `{"enabled": false}` —
+and that is the change to confirm first.
 
-- **(a) AutoBlog autofill** — auto-schedules ~a month of DR-matched keywords each cycle.
+- **(a) AutoBlog autofill** — ON by default. Auto-schedules ~a month of DR-matched keywords each cycle.
   ```bash
   curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
     -H "Content-Type: application/json" -d '{"enabled":true}' \
     https://www.seoladders.com/api/v1/autoblog/autofill | jq .
   ```
-- **(b) Auto-publish** — finished articles push to the connected CMS automatically (needs a CMS).
+- **(b) Auto-publish** — ON by default as soon as a CMS is connected. Finished articles push to the CMS automatically; send `false` for review mode.
   ```bash
   curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
     -H "Content-Type: application/json" -d '{"enabled":true}' \

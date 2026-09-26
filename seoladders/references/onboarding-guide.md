@@ -4,7 +4,7 @@ Get from zero to a working skill in five steps. Most of this happens once, on th
 
 ## 1. Sign up
 
-Go to **[seoladders.com](https://www.seoladders.com)** and create an account. A **3-day free trial** is available — full access, no commitment.
+Go to **[seoladders.com](https://www.seoladders.com)** and create an account. A **7-day free trial** is available — full access, no commitment.
 
 ## 2. Onboarding (we scrape the site)
 
@@ -19,9 +19,14 @@ Two connections matter most:
 
 Connect both in the dashboard before running the SEO loop.
 
-## 4. Get the API key
+## 4. Get the API key *(not needed in the Claude app)*
 
-Go to **Dashboard → Developers** and create an API key (`sk_live_...`). The same key works for both this curl skill and the hosted MCP server.
+If you connected through the **Claude app**, it signs in for you and there is no key —
+skip this step and the next one.
+
+For header-setting clients (Claude Code, Cursor, Windsurf, Codex) and raw curl, open the
+**MCP & Skill** page at `/dashboard/developers` and create an API key (`sk_live_...`).
+The same key works for the curl commands and the hosted MCP server.
 
 ## 5. Export it
 

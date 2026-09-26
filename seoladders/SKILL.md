@@ -1,19 +1,22 @@
 ---
 name: seoladders
 version: 2.0.0
-description: The complete AI-search + SEO skill. Track and grow how AI engines (ChatGPT, Perplexity, Gemini, Claude, Google AI) recommend your brand — then audit your site, find keywords you can win, write and publish full articles, and optimize decaying pages. Works as a no-install skill (curl + jq) or over MCP.
+description: The complete AI-search + SEO skill. Track and grow how AI engines (ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode) recommend your brand — then audit your site, find keywords you can win, write and publish full articles, and optimize decaying pages. Works as a no-install skill (curl + jq) or over MCP.
 author: SEOLadders
 website: https://www.seoladders.com
 requires:
   env:
-    - SEO_LADDERS_API_KEY
+    # Needed ONLY for header-setting clients (Claude Code, Cursor, Windsurf, Codex)
+    # and raw curl. In the Claude app the connector signs in through SEOLadders and
+    # there is no key — see "Setup (gating)".
+    - SEO_LADDERS_API_KEY  # optional in the Claude app
 ---
 
 # SEOLadders — AI Search + SEO, run by your agent
 
 SEOLadders is the all-in-one platform for getting **recommended by AI** and **ranking on Google**. This skill lets your agent run the whole loop end to end:
 
-- **AI visibility (GEO/AEO)** — see whether ChatGPT, Perplexity, Gemini, Claude, and Google's AI answers mention you; track the prompts that matter; measure share-of-voice, sentiment, and which sources AI cites.
+- **AI visibility (GEO/AEO)** — see whether all six tracked engines mention you (ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode — the last two are separate engines); track the prompts that matter; measure share-of-voice, sentiment, and which sources AI cites.
 - **SEO** — audit your site, see what you (and competitors) rank for, find keywords matched to your domain rating, write and publish full articles, and optimize pages stuck on page 2.
 
 It runs against the SEOLadders REST API. There are two ways to execute the commands — **pick MCP whenever it's available:**
@@ -25,10 +28,15 @@ It runs against the SEOLadders REST API. There are two ways to execute the comma
 
 ## Setup (gating)
 
-The API is gated by an API key tied to your SEOLadders account.
+Access is tied to your SEOLadders account. **How you authenticate depends on the client:**
 
-1. Sign up at **[seoladders.com](https://www.seoladders.com)** and complete onboarding (we read your website to learn the business). A 3-day free trial is available.
-2. Go to **Dashboard → Developers** and create an API key (`sk_live_...`).
+- **Claude app** — the connector signs you in through SEOLadders (OAuth). There is **no
+  key to create and nothing to export**; skip steps 2 and 3 below.
+- **Claude Code / Cursor / Windsurf / Codex, or raw curl** — these set request headers,
+  so they need an API key. Follow all three steps.
+
+1. Sign up at **[seoladders.com](https://www.seoladders.com)** and complete onboarding (we read your website to learn the business). A 7-day free trial is available.
+2. *(header clients and curl only)* Open the **MCP & Skill** page at `/dashboard/developers` and create an API key (`sk_live_...`).
 3. Export it:
 
 ```bash
@@ -60,7 +68,7 @@ Do NOT tell them to paste a key into the URL, and do NOT tell them to leave the 
 
 The first time this skill loads, walk the user through the proper process below: account + onboarding → connect website + Google Search Console → audit → **check AI visibility** → keyword clusters → write → optimize.
 
-> Calls require an active subscription (or trial). A request without one returns **HTTP 402 `subscription_required`** with an `action.url` to start a plan — surface that to the user verbatim. A 3-day free trial is available, and the first month is **50% off**.
+> Calls require an active subscription (or trial). A request without one returns **HTTP 402 `subscription_required`** with an `action.url` to start a plan — surface that to the user verbatim. A 7-day free trial is available, and the first month is **50% off**.
 
 ## The proper AI-SEO process (what this skill runs)
 
@@ -70,11 +78,11 @@ The first time this skill loads, walk the user through the proper process below:
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
 5. **Build topic clusters** (`/topical-authority`) — a pillar topic holds *both* the keywords to rank for on Google *and* the AI prompts to win in AI answers. Research keywords to fill each cluster (`/keyword-research`) and track buyer prompts under it. This is the unit that ties SEO and GEO together.
 6. **Track the right prompts** (`/prompts`) — pull suggestions from your real **Google Search Console** queries, keywords, or People-Also-Asked, then add the good ones under the relevant topic. Respect the plan's prompt cap; swap low-value prompts when full.
-7. **Choose how to ship** — either **write now** (`/write-article`), or **schedule** the keywords on the content calendar (`/content-calendar`) and turn on **autofill + auto-publish** so AutoBlog generates and publishes them for you (opt-in autopilot — confirm with the user before enabling either).
+7. **Choose how to ship** — either **write now** (`/write-article`), or **schedule** the keywords on the content calendar (`/content-calendar`) and leave AutoBlog to generate and publish them. **Autofill and auto-publish are already on** (auto-publish switches itself on when a CMS is connected), so this is the default behaviour, not something to enable. If the user wants to approve each article first, turn auto-publish *off* — review mode is the switch.
 8. **Write and publish** (`/write-article`) — full research → draft → media → FAQ → citations → schema. Every article ships with internal links, AI images, YouTube embeds, and citations.
 9. **Optimize** — rewrite page-2 / declining / stale pages from GSC data (`/optimize`); it also refreshes content in place.
 10. **Act on recommendations** (`/actions`) — outreach, Reddit, and content-gap actions drawn from your real monitoring data.
-11. **Link building** (`/link-building`) — turn the pages AI cites for your prompts, plus the pages linking to your competitors and not to you, into quality-scored prospects with a discovered contact and a drafted, ready-to-send pitch (publisher pitch, forum reply, review request, repo PR, directory submission). You review and send; never auto-sent.
+11. **Link building** (`/link-building`) — turn the pages AI cites for your prompts, the pages linking to your competitors and not to you, and the best-of lists already ranking for what your buyers search, into quality-scored prospects with a discovered contact and a drafted, ready-to-send pitch (publisher pitch, forum reply, review request, repo PR, directory submission). You review and send; never auto-sent.
 
 ## Slash Commands
 
@@ -88,8 +96,9 @@ Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app
 | `/content-gaps` | Buyer questions where AI doesn't name you — write/schedule them, and mark gaps done (or reopen) |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
-| `/link-building` | Pages AI cites for you **and** pages linking to your competitors but not you — quality-scored, with a contact and a drafted pitch; list, find/refresh, update status, draft follow-up |
-| `/competitors` | Track competitors for AI share-of-voice (5 slots) — list, promote suggestions, add, remove |
+| `/topical-authority` | Build and track topic clusters: a pillar topic, the keywords that cover it, and the AI prompts underneath |
+| `/link-building` | Pages AI cites for you, pages linking to your competitors but not you, **and** the roundups ranking for your buyers — quality-scored, with a contact and a drafted pitch; list, find/refresh by source, update status, draft follow-up |
+| `/competitors` | Track competitors for AI share-of-voice (10 slots on Pro, 5 on trial) — list, promote suggestions, add, remove |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit <domain>` | Full SEO audit (health, CTR, decay, page-2, issues) |
 | `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
@@ -111,8 +120,8 @@ Command files live in `commands/`. If they're not auto-registered by your instal
 
 | Plan | Price | What you get |
 |---|---|---|
-| **Pro (trial)** | 3-day free trial | Full access to everything below |
-| **Pro** | $99/mo, per website — **50% off your first month** | 20 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations, sentiment · Content Radar · site audits · auto-publish |
+| **Pro (trial)** | 7-day free trial | Full access to everything below |
+| **Pro** | $97/mo, per website — **50% off your first month** | 30 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations, sentiment · Content Radar · site audits · auto-publish |
 
 The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `references/plans-and-backlinks.md` for detail.
 
@@ -140,13 +149,13 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 # --- Audit ---
 
-# Run a site audit (async → returns a jobId)
+# Start a site audit (metered + billed per page; read the stored one first)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"domain":"example.com"}' \
   https://www.seoladders.com/api/v1/audit | jq .
 # Poll until status is "completed"
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/jobs/JOB_ID | jq '{status, output}'
+  "https://www.seoladders.com/api/v1/audit?id=AUDIT_ID" | jq '{status, health_score}'
 # Or read the latest stored audit
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/audit | jq '.audit'
@@ -193,7 +202,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/link-building | jq '.targets[] | {motion, source_title, dr, quality_score, status}'
 
-# Competitors you track (5 slots) — tracked + AI-named suggestions
+# Competitors you track (10 slots on Pro, 5 on trial) — tracked + AI-named suggestions
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/competitors | jq '{slots, tracked, suggestions}'
 # Add (cap-aware) / remove
@@ -234,15 +243,18 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -d '{"keyword":"best ai seo tools","sourceUrl":"https://example.com/post"}' \
   https://www.seoladders.com/api/v1/optimizations | jq .
 
-# --- Topical authority (topic clusters: keywords + prompts + coverage) ---
+# --- Topical authority (topic clusters: keywords + prompts + coverage + authority) ---
 
-# List topics with coverage rollups (covered / planned / gap)
+# List topics. `coverage` = what was written for the topic; `authority` = what
+# it won (articles we published that now rank + prompts whose AI answers name
+# the brand), with a `stage` from planned → published → indexed → ranking →
+# winning → cited.
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/topics | jq '.topics[] | {id, name, coverage}'
+  https://www.seoladders.com/api/v1/topics | jq '.topics[] | {id, name, coverage, authority}'
 # One topic + its keywords AND the AI prompts tracked under it (keywords tagged
 # covered/planned/gap — gaps are your to-write list; prompts are the GEO half)
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/topics/TOPIC_ID | jq '{coverage, keywords, prompts}'
+  https://www.seoladders.com/api/v1/topics/TOPIC_ID | jq '{coverage, authority, keywords, prompts}'
 # Create a topic
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"name":"technical seo"}' \
@@ -278,7 +290,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/knowledge | jq '.sources[]'
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"type":"note","title":"Pricing","content":"Pro is $99/mo early-bird, 3-day trial."}' \
+  -d '{"type":"note","title":"Pricing","content":"Pro is $97/mo early-bird, 7-day trial."}' \
   https://www.seoladders.com/api/v1/knowledge | jq '.source'
 
 # What's connected (CMS / GSC / webhook)
@@ -299,12 +311,14 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/articles/ARTICLE_ID/publish | jq '{published, url, externalId}'
 
-# AutoBlog autofill — auto-schedule ~a month of DR-matched keywords each cycle (spends quota)
+# AutoBlog autofill — ON BY DEFAULT. GET the current value before changing it.
+# (auto-schedules ~a month of DR-matched keywords each cycle; spends quota)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"enabled":true}' \
   https://www.seoladders.com/api/v1/autoblog/autofill | jq '{autofill, message}'
 
-# Auto-publish — push finished articles to the CMS automatically (400 if no CMS connected)
+# Auto-publish — ON BY DEFAULT once a CMS is connected. Send false for review mode.
+# (400 if no CMS connected)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"enabled":true}' \
   https://www.seoladders.com/api/v1/settings/auto-publish | jq '{autoPublish, message}'

@@ -1,6 +1,6 @@
 # /competitors
 
-Manage the competitors you track for AI visibility (share-of-voice). You get **5 slots**. Suggestions are brands AI named in answers that you don't track yet.
+Manage the competitors you track for AI visibility (share-of-voice). You get **10 slots on Pro** (5 on a trial). Read the cap off the response rather than assuming it. Suggestions are brands AI named in answers that you don't track yet.
 
 `$ARGUMENTS` = optional competitor domain(s) to add. If empty, just list tracked + suggestions and let the user pick which to add.
 
@@ -39,4 +39,4 @@ curl -s -X DELETE -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - Show `slots.used/cap`. If `remaining` is 0, tell the user to remove one before adding another.
 - Recommend promoting the top `suggestions` (highest `count`) — those are who AI actually mentions instead of (or alongside) the brand.
-- After changing competitors, re-run the monitor on the dashboard so share-of-voice updates. See `/ai-visibility`.
+- After changing competitors, share-of-voice updates on the next scheduled run; there is nothing to trigger by hand on Pro. See `/ai-visibility`.

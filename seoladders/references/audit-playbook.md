@@ -7,11 +7,11 @@ Don't write new content into a site that's leaking. Audit first, fix what's slip
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"domain":"example.com"}' \
-  https://www.seoladders.com/api/v1/audit | jq '{jobId, status}'
+  https://www.seoladders.com/api/v1/audit | jq '{auditId, status}'
 
 # Poll until completed
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/jobs/JOB_ID | jq '{status, output}'
+  "https://www.seoladders.com/api/v1/audit?id=AUDIT_ID" | jq '{status, health_score}'
 ```
 
 Or read the latest stored audit without waiting:
