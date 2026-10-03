@@ -19,4 +19,8 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - **Your domain** → surface page-2 keywords (`position` 11–20) as `/optimize` targets.
 - **A competitor's domain** → keywords they rank for that you don't are content gaps → `/keyword-research` then `/write-article`.
-- Default `limit` is 50; raise it for a fuller picture. Add `?site=<domain>` to scope to a specific project.
+- Default `limit` is 50, maximum 100. Add `?site=<domain>` to scope to a specific project.
+
+## Metered
+
+Each call spends **one keyword-research credit** from the monthly allowance it shares with `/keyword-research` (Pro: 100/mo). A `429` means the allowance is spent; retrying will not help. Look up the one or two domains that matter, and confirm with the user before checking more. Never loop over a list of domains.

@@ -20,7 +20,8 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   "https://www.seoladders.com/api/v1/prompts/explorer?source=gsc" | jq '{sourceLabel, suggestions, note, needsConnect}'
 ```
 
-- Prefer **`source=gsc`** — prompts derived from queries you already rank for convert best.
+- Prefer **`source=gsc`** — prompts derived from queries you already rank for convert best, and it is **free**.
+- `source=keywords` and `source=paa` are **metered**: each call spends one keyword-research credit (shared with `/keyword-research`; a `429` means the month's allowance is spent).
 - `needsConnect:true` (gsc) → GSC isn't connected; fall back to `source=keywords` or `source=paa`, and tell the user to connect GSC.
 - Pass `&seed=<topic>` to focus `keywords`/`paa`.
 

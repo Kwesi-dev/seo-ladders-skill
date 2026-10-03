@@ -125,6 +125,12 @@ Command files live in `commands/`. If they're not auto-registered by your instal
 
 The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `references/plans-and-backlinks.md` for detail.
 
+### Limits (read before looping)
+
+- **60 requests a minute** per account, across this API and the MCP server together.
+- Some actions are **metered** against monthly allowances: keyword research (shared by `/keyword-research`, `/rankings` and paid `/prompts` suggestions), prospect discovery (`/link-building` competitor gap and SERP roundups) and knowledge additions. See `references/plans-and-backlinks.md` for the numbers.
+- A `429` is a stop sign, not a retry signal: `rate_limited` → wait a minute; a monthly allowance → it is spent until the next billing period. Never loop a metered command over a list; pick what matters and confirm with the user first.
+
 ## Commands (raw API)
 
 Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`. To target a specific site, add `?site=<domain>` or an `X-Site: <domain>` header (defaults to your active site).

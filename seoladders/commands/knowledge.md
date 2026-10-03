@@ -27,6 +27,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 - Body: `{ type:"note", title?, content }` or `{ type:"url", title?, url }`.
 - New sources start `status: "processing"` and become `ready` once ingested.
+- Each addition spends **one credit from a monthly knowledge allowance** (Pro: 50/mo). A `429` means it is spent. Add facts the writer is getting wrong, not a copy of the website.
 
 ## What to do with the result
 

@@ -126,6 +126,12 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/link-building | jq '{ok, added, reason, message}'
 
 # Or pick a source: ai_citation | competitor_gap | serp_roundup | all
+# competitor_gap and serp_roundup are METERED: together they draw on a monthly
+# discovery allowance (Pro: 8 runs/mo, one per call). A 429 with
+# reason "allowance_used" means it is spent. With "all" and the allowance
+# spent, ai_citation still runs and the other two come back in `ran` as
+# skipped. The Monday batch refreshes all three on its own, so do not call
+# find repeatedly.
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"source":"serp_roundup"}' \
