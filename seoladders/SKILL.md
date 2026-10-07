@@ -92,7 +92,7 @@ Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app
 |---|---|
 | `/seoladders` | Overview, account status, and the proper AI-SEO process |
 | `/seoladders-setup` | Check the API key, confirm website + GSC are connected, list your sites |
-| `/ai-visibility` | Your AI-visibility score across engines — mentions, share-of-voice, sentiment, citations (+ sub-views: citations, sentiment, sources) |
+| `/ai-visibility` | AI visibility, in two features. **Prompt Tracking** (default): your score across engines for your tracked prompts — share-of-voice, sentiment, citations (+ sub-views: citations, sentiment, sources). **AI Mentions** (`view: mentions`): where Google AI and ChatGPT already mention or cite you beyond your tracked prompts |
 | `/content-gaps` | Buyer questions where AI doesn't name you — write/schedule them, and mark gaps done (or reopen) |
 | `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
 | `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |

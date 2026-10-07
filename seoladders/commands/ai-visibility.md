@@ -2,6 +2,8 @@
 
 Your visibility across AI engines — whether all six tracked engines recommend you (ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode). This is the differentiator. Lead with it.
 
+The product has two AI-visibility features, and the dashboard names them separately: **Prompt Tracking** (everything below except the last section: answers to the prompts the site tracks) and **AI Mentions** (`/ai-visibility/mentions`: where AI already mentions or cites the site across all monitored answers). Their numbers differ on purpose. When you report them, say which one each number comes from.
+
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/ai-visibility | jq .
@@ -45,3 +47,20 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/ai-visibility/sources | jq '{socials, offsite, pages}'
 ```
+
+## AI Mentions: beyond the prompts you track (`view: mentions`, its own page in the dashboard)
+
+The views above all come from the prompts you track. **AI Mentions** answers a different question: across the AI answers we monitor, where do Google AI and ChatGPT **already** mention or cite your site? It needs no setup and updates on its own. Don't tell the user how often it updates.
+
+```bash
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/ai-visibility/mentions | jq '{state, totals, changeSinceLast, pages: .pages[:5], competitors}'
+```
+
+- **`state`**: `ready`, `building` (the first check has just started; call again in a minute or two), `failed` (retried within a day; say so rather than calling it broken), or `unavailable` (no active subscription).
+- **`totals`**: `{mentions, aiSearchVolume, byEngine}`. Coverage is **Google AI Overviews, plus ChatGPT for US English sites only**. Do not describe this as all six engines.
+- **`queries`**: every question you appear in. **`cited: true`** means one of your pages is a source of the answer; **`cited: false`** means AI *names* you but links elsewhere. Those named-only questions are the best targets to turn into citations.
+- **`pages`**: your pages AI uses as a source, with how many questions each answers. `writtenBySeoladders: true` means it is an article SEOLadders published.
+- **`competitors`**: you and your tracked competitors, by brand-name mentions. `isYou: true` is you.
+- **`nicheTopDomains`**: filled only when you have no mentions yet. The sites AI cites for your topics.
+- **Trials** get one snapshot; it updates once they subscribe. Reading it is not metered.

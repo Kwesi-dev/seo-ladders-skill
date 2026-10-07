@@ -50,7 +50,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ## Research keywords for a topic (metered)
 
-Pull real DataForSEO candidates (keyword ideas + related + suggestions, merged and relevance-filtered) for the topic. Candidates are **not saved** — review them, then add the ones you want.
+Pull real keyword candidates (keyword ideas + related + suggestions, merged and relevance-filtered) for the topic. Candidates are **not saved** — review them, then add the ones you want.
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
