@@ -126,6 +126,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/link-building | jq '{ok, added, reason, message}'
 
 # Or pick a source: ai_citation | competitor_gap | serp_roundup | all
+# ai_citation: at most 3 finds a day per site. Follow-up drafts: at most 20 a day.
 # competitor_gap and serp_roundup are METERED: together they draw on a monthly
 # discovery allowance (Pro: 8 runs/mo, one per call). A 429 with
 # reason "allowance_used" means it is spent. With "all" and the allowance

@@ -25,7 +25,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ## Before you call
 
-- Check `/integrations` first — you need a **connected CMS** (WordPress or webhook). `400` if none is connected.
+- Check `/integrations` first — you need a **connected CMS** (WordPress, Ghost, Notion or webhook). `400` if none is connected.
 - The article must be **`ready`**. `400` if it isn't, `404` if it's not your post.
 - **`409 replaces_pre_join_page`** — the draft is a rewrite of a page we never wrote,
   so publishing it would create a second page competing with the user's own live one.

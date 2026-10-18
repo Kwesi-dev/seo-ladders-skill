@@ -1,48 +1,44 @@
-# /write-article <keyword-or-topic>
+# /write-article
 
-Research → draft → media → FAQ → citations → schema → internal links, and publish one article. Async.
+The article writer. **The agent already writes for you.** It schedules your keywords on the AutoBlog calendar and, on each scheduled day, researches the topic, writes the article (sources, images, internal links, FAQ, schema) and publishes it. So this command starts by showing that plan. Usually the answer is "it's on its way".
 
-**Target** = `$ARGUMENTS` — a keyword **or a raw topic / question** (e.g. a Content Gap prompt like "how does a search engine match keywords to a page"). No keyword research required: the pipeline studies the top SERP results for whatever you pass and auto-picks the format. If `$ARGUMENTS` is empty, pull a target from `/content-gaps` or `/keyword-research` first, then confirm it with the user.
+## Show the plan first (free)
 
-## Kick it off
+```bash
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/articles/today \
+  | jq '{plan, articles, today, upcoming: .upcoming[:7], writingNow, calendarUrl, instructions_for_agent}'
+```
 
-The target — keyword or raw topic — goes in the `keyword` field (it's free-text):
+(MCP: `write-article` with no args.)
+
+- `plan`: `trial` or `pro`. `articles`: used, limit and remaining this billing cycle.
+- `today[]`: what is scheduled today and its state (`pending` = not started, `in_progress`, `published`, `failed`), with a link once written.
+- `upcoming[]`: the next scheduled articles with their dates.
+- `calendarUrl`: the AutoBlog calendar.
+
+Tell the user, in their numbers:
+
+> Your agent writes your articles for you. On your trial it researches, writes and publishes 3 articles, one on each scheduled day. Next up: "best crm for startups" today, "crm vs spreadsheet" on Oct 21. See the full schedule: [calendar].
+
+On Pro, say how many it writes this cycle and how many are left. Then link the articles already written so they can read them.
+
+## Writing today's article now
+
+Only **today's** scheduled article can be written early, and only if the agent hasn't started it. One article, never several, never a keyword that isn't on today's calendar.
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  -H "Content-Type: application/json" -d '{"keyword":"$ARGUMENTS"}' \
-  https://www.seoladders.com/api/v1/articles | jq .
+  -H "Content-Type: application/json" -d '{}' \
+  https://www.seoladders.com/api/v1/articles/today | jq '{articleId, keyword, dashboardUrl, message}'
 ```
 
-Optional fields on the same body:
+(MCP: `write-article` with `write: true`.)
 
-- **`articleType`** — `"Explainer"`, `"Guide: How-to"` or `"Listicle"`. Pick it from the
-  search intent rather than leaving it to default.
-- **`subDescription`** — an angle or audience note to steer the outline.
-- **`referenceUrl`** — a page to ground the article in.
+- It is the same article the daily run would write, so it is never written twice, and it uses the same article allowance.
+- Refusals come back as `409` with `instructions_for_agent`: `nothing_scheduled_today` (with the next date), `not_todays_article`, `already_written` (with its link) or `already_writing`. Read the message to the user; don't retry.
+- Poll `GET /api/v1/articles/ARTICLE_ID` (MCP: `get-article`) until `status` is `ready`.
 
-Returns `{ articleId, status, dashboardUrl }`. **`dashboardUrl`** is an SEOLadders link to watch/edit the article (`…/dashboard/article-writing?articleId=…`) — share it with the user so they can follow generation and edit in the dashboard.
+## Want a different article?
 
-## Poll until done
-
-```bash
-# Poll the ARTICLE — this endpoint returns no job id, so there is nothing to poll at
-# /jobs/{id} — there is no such endpoint; a site audit is polled at
-# /audit?id=<auditId>.
-curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/articles/ARTICLE_ID | jq .
-```
-
-- Poll every ~10s until `status` is `ready` (article generation takes a while — it's a full pipeline).
-- Once ready, `GET /v1/articles/{id}` returns the finished article:
-  - **`articleMarkdown`** — full article as Markdown
-  - **`htmlContent`** — complete standalone HTML document (head, meta, JSON-LD, table of contents, styled layout, YouTube embeds) — the exact dashboard "Export HTML"
-  - **`articleContentJson`** — structured sections / FAQ / media plan
-  - **`jsonLd`** — schema; plus `title`, `slug`, `metaDescription`, `wordCount`, `externalUrl` (live URL if published), and **`dashboardUrl`** (the SEOLadders link to view/edit it)
-
-## What to do with the result
-
-- Save `htmlContent` to a `.html` file (it's self-contained), or `articleMarkdown` to `.md` — both are publish-ready.
-- The article ships with internal links, AI images and citations. A video is added **only where one genuinely fits a section**, so expect none, one or two — and never a competitor's or another vendor's channel. Do not promise embeds up front.
-- To push it live, use `/publish <article-id>` — though with a CMS connected it auto-publishes on its own, since auto-publish is on by default.
-- Pro includes 30 articles/mo. Write for keywords from `/keyword-research` and gaps from `/ai-visibility`.
+Change the schedule rather than writing around it: `/content-calendar` adds or moves a keyword, and the agent writes it on its date. `/my-keywords` shows everything it has chosen.

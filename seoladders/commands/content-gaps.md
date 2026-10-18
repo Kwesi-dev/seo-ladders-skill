@@ -19,15 +19,10 @@ Returns `{ hasData, monitorId, gaps, done, count }`. Each open gap: `{ promptId,
 
 ## Act on a gap
 
-Each gap is a real buyer question — write for it, schedule it, or mark it handled.
+Each gap is a real buyer question. The agent schedules gaps onto the calendar on its own; check `/write-article` for what's already coming before adding one. To add one yourself, schedule it, or mark it handled.
 
 ```bash
-# Write now — the gap's `prompt` is the raw topic (no keyword research needed)
-curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  -H "Content-Type: application/json" -d '{"keyword":"PROMPT"}' \
-  https://www.seoladders.com/api/v1/articles | jq .
-
-# Or schedule it onto the AutoBlog calendar (prompt = raw topic), then mark done
+# Schedule it onto the AutoBlog calendar (prompt = raw topic); the agent writes it on that date
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"keyword":"PROMPT","date":"2026-07-01"}' \
   https://www.seoladders.com/api/v1/calendar | jq .
@@ -42,6 +37,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ## What to do with the result
 
 - Sort by `severity: "missing"` then lowest `brandPct` — write those first.
+- **AutoBlog already schedules blog-format gaps on its own**, about two a week (8 of a 30-day calendar), worst first, when it fills each month's calendar. Nothing is swapped in mid-month: a gap found after the fill waits for the next one. Check `/content-calendar` before scheduling a gap by hand so you don't add it twice. Page-format gaps (comparison, pricing) are never scheduled automatically.
 - After you write or schedule a gap, **mark it done** (`status: "done"`) so it leaves the list and shows as handled in the Actions kanban. Reopen with `status: "reopen"`.
-- If `hasData: false`, there's no completed monitor run yet — the monitor is created for you during onboarding and runs on a schedule (every few days), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
+- If `hasData: false`, there's no completed monitor run yet — the monitor is created for you during onboarding and reruns on a schedule throughout the week (a trial gets one scan), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
 - Pair with `/ai-visibility` (the score) and `/actions` (outreach to the sources AI cites).

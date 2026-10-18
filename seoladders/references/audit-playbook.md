@@ -64,7 +64,7 @@ With the site healthy and existing pages routed, write into the gaps:
 
 - `/rankings competitor.com` → keywords rivals own that you don't.
 - `/keyword-research <seed>` → winnable, DR-matched keywords.
-- `/write-article <keyword>` → publish, with internal links.
+- `/content-calendar` → schedule it; the agent writes and publishes it, with internal links.
 
 ## The rule
 

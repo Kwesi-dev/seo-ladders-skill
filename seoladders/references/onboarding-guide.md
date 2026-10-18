@@ -14,7 +14,7 @@ During onboarding you give us your website URL and we **scrape it to learn the b
 
 Two connections matter most:
 
-- **Website / CMS** — so the skill can publish articles (WordPress or any webhook CMS).
+- **Website / CMS** — so the skill can publish articles. Native: **WordPress** (plugin or Application Password), **Ghost** (Admin API key) and **Notion** (a connection's API token + the blog database, shared with it). Anything else: a **webhook**. Webflow and Framer are not available yet.
 - **Google Search Console** — powers the **audit, Content Radar, rankings, and prompt discovery**. Without GSC, Content Radar and GSC-derived prompts run blind, and calls return `400` with `details.code: gsc_not_connected`.
 
 Connect both in the dashboard before running the SEO loop.
@@ -52,4 +52,4 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ## Then
 
-Run the loop: `/seoladders` (orientation) → `/gsc-audit` + `/content-radar` (audit first) → `/ai-visibility` (the differentiator) → `/prompts` → `/keyword-research` → `/write-article` → `/optimize` → `/actions`.
+Run the loop: `/seoladders` (orientation) → `/gsc-audit` + `/content-radar` (audit first) → `/ai-visibility` (the differentiator) → `/prompts` → `/keyword-research` → `/content-calendar` → `/optimize` → `/actions`.

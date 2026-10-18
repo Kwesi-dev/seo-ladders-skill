@@ -35,13 +35,14 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/ai-visibility | jq .
 ```
 
-- **`visibilityScore`** — the headline. Track it over time; it should climb as you act.
+- **`visibilityScore`** — the headline, blended from tracked prompts (two weeks), AI Mentions and AI visits (when GA is connected); `visibilityParts` shows each. Track it over time; it should climb as you act. Don't report `namedRate` as the score: it is one scan and swings.
 - **`perEngine`** — find your weakest engine (`pct`, `mentioned/total`). Some engines lean on different sources — a weak engine usually means you're missing the sources *that* engine cites.
 - **`shareOfVoice`** — you (`isBrand:true`) vs competitors. If a rival's `pct` beats yours, study where they're cited and earn the same.
 - **`sentiment`** — being mentioned negatively is its own problem; fix the narrative on the sources driving it.
 - **`topCitations`** — the sources AI trusts for these prompts. `owned:false` = an outreach target. `owned:true` = your pages already winning — make more like them.
+- **`buyingJourney`** — your pages AI links to at each buying stage. A `no_page` stage (no pricing or comparison page) is the owner's to fix; the agent writes articles, not site pages.
 
-> `hasData:false` → the monitor is created for you during onboarding and runs on a schedule (every few days), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
+> `hasData:false` → the monitor is created for you during onboarding and reruns on a schedule throughout the week (a trial gets one scan), so this means the first run has not landed yet — not that the user must do something. **Pro has no manual runs**, so do not send them to a Run button: it will refuse them.
 
 ### 3. Earn citations from the sources AI already trusts
 
@@ -53,12 +54,12 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ### 4. Write content for the gaps
 
-For prompts where you're absent and no owned page is cited, the fix is content: write the page AI *should* cite.
+For prompts where you're absent and no owned page is cited, the fix is content: the page AI *should* cite. Schedule it on the calendar and the agent writes it on that date (content gaps are also scheduled by the agent on its own; check `/write-article` for what's already coming).
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  -H "Content-Type: application/json" -d '{"keyword":"best ai seo tools"}' \
-  https://www.seoladders.com/api/v1/articles | jq .
+  -H "Content-Type: application/json" -d '{"keyword":"best ai seo tools","date":"2026-11-03"}' \
+  https://www.seoladders.com/api/v1/calendar | jq '.entry'
 ```
 
 - Answer the prompt directly and early (AI extracts answers, not fluff).

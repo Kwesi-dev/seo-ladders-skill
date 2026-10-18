@@ -1,6 +1,8 @@
-# /search-console [query|page]
+# /search-console [question]
 
-The queries and pages the site **actually** ranks for, straight from Google Search Console — clicks, impressions, CTR and average position. This is the source of truth the site audit and prompt discovery both build on, so reach for it whenever a claim about current performance needs grounding in real data rather than estimates.
+**Your own Google Search Console data, for any analysis you want.** Clicks, impressions, CTR and position by query, page, date, country, device or search appearance, over any window up to about 16 months, with filters. It comes live from your connection, costs nothing against your plan, and each exact query is cached for 6 hours, so asking again is instant.
+
+Use it for anything: what you rank for, which pages lost clicks month over month, mobile vs desktop, a country, branded vs non-branded, one page's queries. Build the query from what the user asks.
 
 ```bash
 # Top queries, last 90 days
@@ -13,9 +15,48 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   "https://www.seoladders.com/api/v1/search-console?dimension=page&days=28&limit=50" | jq .
 ```
 
-**Params:** `dimension=query|page` (default `query`), `days` (default `90`), `limit` (default `100`).
+**Simple params:** `dimension=query|page` (default `query`), `days` (default `90`), `limit` (default `100`).
 
-**Requires GSC to be connected.** A `400` means it isn't — tell the user to connect Google Search Console at `/dashboard`. Don't fall back to estimated data and present it as measured.
+## Any query (flexible mode)
+
+Pass any of these and the route switches to flexible mode (GET params, or a POST JSON body):
+
+| Param | Values |
+|---|---|
+| `dimensions` | comma list of `query`, `page`, `date`, `country`, `device`, `searchAppearance` |
+| `startDate`, `endDate` | `YYYY-MM-DD`; or `days` (max ~486) |
+| `filters` | JSON array of `{dimension, operator, expression}`; operators `equals`, `notEquals`, `contains`, `notContains`, `includingRegex`, `excludingRegex`; combined with AND. Countries are 3-letter lowercase (`usa`), devices `DESKTOP`/`MOBILE`/`TABLET` |
+| `searchType` | `web` (default), `image`, `video`, `news`, `discover`, `googleNews` |
+| `rowLimit`, `startRow` | up to 25000 rows a call; page with `nextStartRow` |
+| `aggregationType`, `dataState` | `auto`/`byPage`/`byProperty`; `final`/`all` |
+
+```bash
+# One page's queries on mobile, last 28 days
+curl -s -G -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/search-console \
+  --data-urlencode 'dimensions=query' --data-urlencode 'days=28' \
+  --data-urlencode 'filters=[{"dimension":"page","operator":"contains","expression":"/pricing"},{"dimension":"device","operator":"equals","expression":"MOBILE"}]' \
+  | jq '{startDate, endDate, count, rows: .rows[:20]}'
+
+# Daily clicks for the whole site
+curl -s -G -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/search-console \
+  --data-urlencode 'dimensions=date' --data-urlencode 'startDate=2026-07-01' --data-urlencode 'endDate=2026-09-30' | jq '.rows'
+```
+
+(MCP: `search-console` with the same fields.) Flexible rows are flat: `{query, page, ..., clicks, impressions, ctr, position}`.
+
+## Trends from stored snapshots (no Google call)
+
+```bash
+curl -s -G -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/search-console/history \
+  --data-urlencode 'type=page' --data-urlencode 'url=/blog/' | jq '.series[:5]'
+```
+
+(MCP: `search-console-history`.) Weekly points per page or query. Each point has a `kind`: `rolling_90d` (90-day totals) or `daily_backfill` (a single day). Compare clicks and impressions within one kind only; position compares across both.
+
+## Not connected or expired
+
+A `400 gsc_not_connected` (or `gsc_reconnect_required`) comes with `connectUrl` and `instructions_for_agent`: tell the user, give the link, don't retry. A `429 gsc_quota_exceeded` means wait about 10 minutes. Never fall back to estimated data presented as measured.
 
 ## How to read it
 
