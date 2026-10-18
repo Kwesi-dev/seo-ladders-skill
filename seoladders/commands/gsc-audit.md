@@ -1,48 +1,43 @@
-# /gsc-audit <domain>
+# /gsc-audit
 
-Full SEO audit — health score, CTR, decay, page-2, technical issues.
+Your site audit: health score and every open issue, worst first, with the page, why it matters and what to do.
 
-**Read the stored audit first.** The site is re-crawled automatically every week, and a
-new crawl is billed per page *and* metered against the site-audit allowance. Only start
-one when the stored audit predates changes the user has since made — and say so before
-you do.
+**The agent already runs it.** It audits your site when the trial starts and again every Monday on its own, so there is almost always a recent one. Read it; don't start one.
 
-**Domain** = `$ARGUMENTS`. If `$ARGUMENTS` is empty, send `{}` to audit your active site.
+## Read the audit the agent already ran (free)
 
-## Start a new audit (only when the stored one is out of date)
+```bash
+curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  https://www.seoladders.com/api/v1/audit \
+  | jq '{audit: .audit | {health_score, total_issues, total_pages_crawled, created_at}, bySeverity: .report.bySeverity, issues: .report.issues[:10], running: .report.running, dashboardUrl: .report.dashboardUrl}'
+```
+
+(MCP: `gsc-audit` with no args.)
+
+- `report.issues[]`: severity, category, title, page, `whyItMatters`, `whatToDo`, current and suggested value, pages affected. Up to 60, worst and most widespread first.
+- `report.running`: an audit in progress right now, if any.
+- `report.dashboardUrl`: the full report with every page.
+- `audit: null` and nothing running → the first audit hasn't run yet (it starts when onboarding finishes).
+
+## If the user asks for a new audit
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  -H "Content-Type: application/json" -d '{"domain":"$ARGUMENTS"}' \
-  https://www.seoladders.com/api/v1/audit | jq '{auditId, status}'
+  -H "Content-Type: application/json" -d '{}' \
+  https://www.seoladders.com/api/v1/audit | jq '{auditId, status, alreadyRunning, alreadyAudited, message, dashboardUrl}'
 ```
 
-`domain` is optional — omit it (or send `{}`) to audit your active site.
-Returns `{ auditId, status: "analyzing" }`. A `429` means the site-audit allowance for
-the cycle is spent; surface the message rather than retrying.
+(MCP: `gsc-audit` with `run: true`.)
 
-## Poll that audit until it is ready
-
-```bash
-curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  "https://www.seoladders.com/api/v1/audit?id=AUDIT_ID" | jq '{status, health_score, total_issues}'
-```
-
-- Poll every ~10s until `status` is `ready` (about 1-3 minutes).
-- There is no job queue and no `/jobs/{id}` endpoint for this. Poll the audit itself.
-
-## Or read the latest stored audit (no wait)
-
-```bash
-curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  https://www.seoladders.com/api/v1/audit | jq '.audit'
-```
-
-Returns `{ audit: {id, status, health_score, total_issues, total_pages_crawled, ...} | null }`. `null` → no audit yet, run one.
+- If an audit is **running**, you get it back (`alreadyRunning`), not a second one.
+- If one **finished in the last 7 days**, you get it back with its report (`alreadyAudited`). Nothing is spent.
+- Only when the user has **fixed things since** and wants to see it now, send `{"force": true}`. That crawl is metered against the plan's site audits and billed per page, so confirm first.
+- Poll a running audit with `GET /api/v1/audit?id=AUDIT_ID` until `status` is `ready`.
+- Always your own site.
 
 ## What to do with the result
 
-- Report `health_score`, `total_issues`, `total_pages_crawled`.
-- **Read the stored audit first (`GET`), don't start a new one.** Every crawl is billed per page and the audit re-runs weekly on its own, so a fresh `POST` is only warranted when the stored audit predates changes the user has since made. There is no manual scan in the dashboard any more, for exactly this reason.
-- Pair with `/content-radar` to route pages to optimize. See `references/audit-playbook.md`.
-- When the user marks an issue fixed, the page is **re-checked live** — a fix that did not land comes back as `not_verified` rather than silently closing. Tell them, so they know the tick is verified rather than taken on trust.
+- Lead with what the agent did: "Your agent audited your site on [date]: health 82, 4 high-priority issues." Then the high ones with `whatToDo`, and the dashboard link for the rest.
+- Mention it re-audits every Monday, so fixes show up there without asking.
+- Pair with `/content-radar` for pages losing traffic. See `references/audit-playbook.md`.
+- When the user marks an issue fixed in the dashboard, the page is **re-checked live**; a fix that did not land comes back as `not_verified` rather than silently closing.

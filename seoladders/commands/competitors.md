@@ -1,6 +1,6 @@
 # /competitors
 
-Manage the competitors you track for AI visibility (share-of-voice). You get **10 slots on Pro** (5 on a trial). Read the cap off the response rather than assuming it. Suggestions are brands AI named in answers that you don't track yet.
+The competitors you track for AI visibility (share-of-voice). The agent finds them itself from the brands AI names alongside yours. You get **10 slots on Pro** (5 on a trial). Read the cap off the response rather than assuming it. Suggestions are brands AI named in answers that you don't track yet.
 
 `$ARGUMENTS` = optional competitor domain(s) to add. If empty, just list tracked + suggestions and let the user pick which to add.
 
@@ -25,18 +25,11 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/competitors | jq '{added, skipped, slots}'
 ```
 
-- Body: `{ name: string }` or `{ names: string[] }`. Either form works — a domain (`jasper.ai`) or a brand name (`Jasper`). They're matched on the same identity, so adding one after the other returns `already_tracked` rather than burning a second slot. Removal accepts either form too.
+- Body: `{ name: string }` or `{ names: string[] }`. Either form works — a domain (`jasper.ai`) or a brand name (`Jasper`). They're matched on the same identity, so adding one after the other returns `already_tracked` rather than burning a second slot.
 - Over the 5-slot cap → the extras come back in `skipped` with `reason: "cap_reached"`; already-tracked ones come back as `already_tracked`.
-
-## Remove a competitor (free up a slot)
-
-```bash
-curl -s -X DELETE -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
-  "https://www.seoladders.com/api/v1/competitors?name=rival.io" | jq '{tracked, slots}'
-```
 
 ## What to do with the result
 
-- Show `slots.used/cap`. If `remaining` is 0, tell the user to remove one before adding another.
+- Show `slots.used/cap`. If `remaining` is 0, a slot is freed in the dashboard at /dashboard/competitors.
 - Recommend promoting the top `suggestions` (highest `count`) — those are who AI actually mentions instead of (or alongside) the brand.
 - After changing competitors, share-of-voice updates on the next scheduled run; there is nothing to trigger by hand on Pro. See `/ai-visibility`.

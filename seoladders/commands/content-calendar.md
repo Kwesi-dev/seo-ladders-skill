@@ -49,4 +49,4 @@ default path.
 
 - Use it to space out publishing instead of writing everything at once.
 - Schedule keywords from `/keyword-research` and the prompt gaps from `/ai-visibility`.
-- To write a scheduled keyword now, hand it to `/write-article`.
+- Articles are written on their scheduled date by your agent; there is no write-now command.

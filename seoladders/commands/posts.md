@@ -12,6 +12,6 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 
 ## What to do with the result
 
-- Before `/write-article`, scan existing `keyword`s — if a topic is already covered, optimize it instead of writing a duplicate (avoids cannibalization).
+- Before scheduling with `/content-calendar`, scan existing `keyword`s — if a topic is already covered, optimize it instead of writing a duplicate (avoids cannibalization).
 - Use `blogPostId` with `/optimize` to improve an existing post.
 - `status` tells you what's live vs draft awaiting review.

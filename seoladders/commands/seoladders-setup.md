@@ -22,10 +22,11 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 ```
 
 Returns `{ cms: {type, connected, enabled}, gsc: {connected, siteUrl}, webhook: {configured} }`.
+`cms.type` is one of `wordpress`, `ghost`, `notion`, `webhook` or `none`.
 
 - **`gsc.connected: false`** → tell the user:
   > Connect Google Search Console at the SEOLadders dashboard. It powers the audit, Content Radar, rankings, and prompt discovery — without it most of this skill runs blind.
-- **`cms.connected: false`** → publishing won't work yet; connect WordPress or a webhook at the dashboard (or generate articles and save them locally for now).
+- **`cms.connected: false`** → publishing won't work yet; connect WordPress, Ghost, Notion or a webhook at the dashboard under **Settings → CMS Integration** (or generate articles and save them locally for now). Setup guides: seoladders.com/docs/cms/ghost and seoladders.com/docs/cms/notion.
 
 ## Automations (already on — report, don't offer)
 

@@ -43,11 +43,33 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/content-radar/recommendations | jq '.recommendations[]'
 ```
 
-Returns `{ recommendations: [{ title, detail, priority }] }`. Pass the row's `url`, `keyword`, `bucket`, and `position` — **the checklist changes with the bucket**:
+Returns `{ recommendations: [{ title, detail, priority }], cached }`. A saved checklist (yours or the dashboard's) comes back free; `refresh: true` builds a new one. At most 15 fresh checklists a day per site. Pass the row's `url`, `keyword`, `bucket`, and `position` — **the checklist changes with the bucket**:
 
 - most buckets → on-page fixes (title/meta, headings, content gaps, internal links, schema);
 - `dead_with_demand` → starts with the rebuild-vs-redirect decision, and never suggests editing a page that doesn't exist;
 - `underperforming` → starts with merge / prune / rebuild, and deliberately does **not** suggest title tweaks, which don't move a page from #70.
+
+## Fixing one page: the full diagnosis and work order
+
+For a page you can't rewrite through SEOLadders (landing, pricing, feature and
+docs pages that live in the user's own codebase), ask for the fix plan:
+
+```bash
+curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com/pricing"}' \
+  https://www.seoladders.com/api/v1/content-radar/fix-plan | jq .
+```
+
+Returns `{ plan: { url, keyword, diagnosis, items, publishable, generatedAt }, markdown, cached }`.
+
+- Pass the `url` exactly as the radar reports it. `keyword` is optional and defaults to the row's own primary query, so don't guess one.
+- `diagnosis` says why it's losing (position, click-through against what that position normally earns, the trend, missing schema).
+- `items` are the fixes: `replace` items are finished strings ready to paste (title, meta description, H1, FAQ, JSON-LD); `spec` items are requirements for copy that must be written inside the site's own components (the opening, heading outline, coverage gaps). Never invent that prose yourself.
+- `markdown` is a complete work order with acceptance criteria: the form to hand a coding agent.
+- If the URL redirects or 404s you get an `error` explaining that instead of a plan. That's a real finding (Search Console reports moved URLs for months), not a failure to retry.
+- Takes about 20 seconds and is cached per page. Pass `"refresh": true` only after the fixes are applied; a plan less than 24 hours old comes back from cache even then.
+- **Nothing is published.** We have no write path to these pages, so the plan is for the user or their agent to apply. Over MCP this is the `content-radar-fix-plan` tool. At most 10 fresh plans a day per site (cached plans are free); a `429 daily_cap_reached` resets at 00:00 UTC.
 
 ## What to do with the result
 
