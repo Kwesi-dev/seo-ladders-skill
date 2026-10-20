@@ -1,102 +1,162 @@
-# SEOLadders — AI Search + SEO Skill
+# SEOLadders for Claude, ChatGPT and Cursor
 
-**Your SEOLadders dashboard, inside Claude.** Sign up once, connect the MCP, and run the whole product from Claude Code, the Claude app, Cursor or any MCP client, without opening the UI.
+**Your SEOLadders dashboard, inside the AI app you already use.**
 
-SEOLadders is an SEO agent that works on its own from the day your trial starts. It researches keywords and builds topic clusters, schedules and writes articles and publishes them to your CMS, audits your site every week, checks how ChatGPT, Perplexity, Gemini, Claude, Google AI Overview and Google AI Mode answer your buyers, finds the pages worth a link and drafts the outreach. This skill and MCP give you all of it in chat:
+Ask in plain English, and get answers from your own SEOLadders account:
 
-- **See what your agent did**: the keywords it chose, the articles it scheduled and wrote, your audit, your AI visibility score, the links pointing at your site.
-- **Ask your own data anything**: Google Search Console and Google Analytics, any query, page, date range or filter, free and cached.
-- **Do what you'd do in the dashboard**: correct the knowledge base, schedule or write today's article, publish, optimize a page, work the outreach queue, track prompts and competitors.
+> *"Who does ChatGPT recommend instead of me?"*
+> *"Which of my pages are losing traffic?"*
+> *"What is my agent writing this week?"*
 
-Everything runs on your SEOLadders account: the same data as the dashboard and the same plan allowances, so nothing costs more in Claude than in the app.
-
----
-
-## 1. How it works — the proper AI-SEO process
-
-This is the full loop the skill runs (and walks you through the first time it loads). Steps 1–2 are your one-time setup — that's where you create the API key the **Install** section below needs.
-
-1. **Sign up and onboard** at [seoladders.com](https://www.seoladders.com) — we scrape the site to learn the brand, audience, and competitors. A **7-day free trial** is available, and the first month is **50% off**.
-2. **Connect** the two things that matter most: the website/CMS and Google Search Console. Then, *if your client sets request headers* (Claude Code, Cursor, Windsurf, Codex) or you are using raw curl, create an API key on the **MCP & Skill** page at `/dashboard/developers` (`sk_live_...`). The Claude app signs in for you and needs no key.
-3. **Audit before writing anything** (`/gsc-audit` + `/content-radar`) — find what's slipping, stuck, or buried.
-4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
-5. **Build topic clusters** (`/topical-authority`) — a pillar topic that holds *both* the keywords to rank for on Google *and* the AI prompts to win in AI answers. Research keywords to fill each cluster (`/keyword-research`), and track the buyer prompts under it.
-6. **Track the right prompts** (`/prompts`) — pull suggestions from your real Google Search Console queries, keywords, or People-Also-Asked, then add the good ones under the relevant topic. Respect the cap; swap low-value prompts when full.
-7. **Let the agent ship** — schedule keywords on the content calendar (`/content-calendar`) and AutoBlog writes and publishes them on their dates. **Autofill and auto-publish are on by default** (auto-publish switches itself on when a CMS is connected). Turn auto-publish *off* if the user wants to approve each article first.
-8. **Review what it wrote** (`/posts`). Every article ships with internal links, AI images, YouTube embeds, and citations.
-9. **Optimize** pages stuck on page 2+, declining, or going stale (`/optimize`) — it also refreshes content in place.
-10. **Act on the recommendations** (`/actions`) — outreach, Reddit, and content gaps from your real data.
-11. **Link building** (`/link-building`) — the pages AI cites for your prompts, plus the pages linking to your competitors and not to you, quality-scored, with a discovered contact and a drafted, ready-to-send pitch. You review and send; never auto-sent.
-
-Full setup walkthrough: `seoladders/references/onboarding-guide.md`.
+It uses the same data as your dashboard and the same plan allowances, so nothing costs more in chat than in the app.
 
 ---
 
-## 2. Install — add the Skill *and* connect the MCP
+## Contents
 
-For the best experience, do **both** — in whatever app you use:
+1. [How it works](#how-it-works)
+2. [Before you start](#before-you-start)
+3. [Set it up](#set-it-up) (pick your app)
+4. [Try it](#try-it)
+5. [Something not working?](#something-not-working)
+6. [Everything you can ask for](#everything-you-can-ask-for)
+7. [How SEOLadders works](#how-seoladders-works)
+8. [Plans](#plans)
+9. [For developers](#for-developers)
 
-- **Skill** → teaches Claude *how* SEOLadders works: the method, the commands, when to use each. This is what makes Claude actually understand the platform instead of guessing.
-- **MCP** → gives Claude the authenticated tools to *run* everything.
+---
 
-The same `sk_live_...` key works for both. Set it up for your app:
+## How it works
 
-### Claude app  (web + desktop)
+You add **two things** to your AI app. Each does a different job.
 
-Add it as a **Skill**. The app uploads skills as a small `.zip`, and there are two ways to get one — the first never sends you to GitHub.
+```mermaid
+flowchart LR
+    A["You ask a question"] --> B["Your AI app<br/>(Claude, ChatGPT, Cursor)"]
+    B --> C["Skill<br/>knows HOW to use SEOLadders"]
+    B --> D["MCP connector<br/>DOES the work"]
+    D --> E["Your SEOLadders account<br/>(your real data)"]
+    E --> B
+```
 
-**Option A — ask Claude to package it (easiest)**
+| | What it is | Without it |
+|---|---|---|
+| **Skill** | The instructions. It teaches your AI app how SEOLadders works and which command to use when. | Your AI app has the tools but guesses how to use them. |
+| **MCP connector** | The connection. It lets your AI app read your data and take actions in your account. | Your AI app knows the steps but can't run any of them. |
 
-Paste this into any Claude conversation:
+**Add both.** The setup below walks you through each one.
 
-> Package the skill at https://github.com/Kwesi-dev/seo-ladders-skill.git into a zip I can upload — the `seoladders` folder, with `SKILL.md` at its root.
+---
 
-Claude clones the repo, zips the right folder and hands the file back to download. That's the only download involved: no visiting GitHub, no unzipping a whole repo, and no risk of zipping the wrong level — which is the mistake that makes the upload fail.
+## Before you start
 
-Then upload it — **Customize → Skills → +** (on some versions **Settings → Capabilities → Skills → Upload skill**), pick the zip, and provide your API key when asked. It appears under **Personal skills** with a *slash command + auto* trigger, so Claude runs `/ai-visibility`, `/content-calendar`, `/gsc-audit` and the rest.
+You need two things:
 
-**Option B — make the zip yourself**
+1. **A SEOLadders account.** Sign up at [seoladders.com](https://www.seoladders.com) and finish onboarding. There's a 7-day free trial, and your first month is 50% off.
+2. **Your website and Google Search Console connected** in the dashboard. Many answers (audits, rankings, pages losing traffic) come from Search Console, so connect it first.
 
-**Step 1 — get the skill folder**
+> **Do I need an API key?**
+> Only if you use **Claude Code, Cursor, Windsurf, Codex, ChatGPT or the terminal**. The **Claude app** signs you in instead, so there's no key to copy.
+>
+> To create a key: in your dashboard, open the **MCP & Skill** page (`/dashboard/developers`). Your key starts with `sk_live_` and is **shown only once**, so save it somewhere safe.
 
-On this repo's GitHub page, click the green **Code** button → **Download ZIP**, then unzip it. Inside you'll find a folder called **`seoladders`** (it holds `SKILL.md`, `commands/`, and `references/`).
+---
 
-**Step 2 — zip just the `seoladders` folder**
+## Set it up
 
-- **Mac:** right-click the `seoladders` folder → **Compress "seoladders"** → you get `seoladders.zip`.
-- **Windows:** right-click the `seoladders` folder → **Send to → Compressed (zipped) folder**.
+Pick the app you use:
 
-> Zip the **`seoladders` folder itself** (the one with `SKILL.md` inside) — not the whole repo.
+| I use... | Go to |
+|---|---|
+| **Claude app** (claude.ai, web or desktop) | [Claude app setup](#claude-app) |
+| **Claude Code, Cursor, Windsurf or Codex** | [Code editor setup](#claude-code-cursor-windsurf-or-codex) |
+| **ChatGPT** | [ChatGPT setup](#chatgpt) |
+| **The terminal, or another AI tool** | [Terminal setup](#terminal-or-another-ai-tool) |
 
-**Step 3 — upload it to Claude**
+<br/>
 
-1. **Customize → Skills → +** (add a personal skill).
-2. Upload `seoladders.zip`.
-3. It appears under **Personal skills** with a *slash command + auto* trigger; Claude runs `/ai-visibility`, `/content-calendar`, `/gsc-audit`, etc.
-4. Sign in when Claude asks — see the connector step below. No key needed in the Claude app.
+### Claude app
 
-**Then add the MCP connector — this is what actually runs the commands in the Claude app.** The app's sandbox can't reach the API with raw `curl` (network egress is locked down and `jq` isn't installed), so the skill executes through the MCP tools instead. The connection runs server-side — nothing to install, nothing blocked:
+Three steps: add the skill, add the connector, then check it works.
 
-1. **Customize → Connectors → + → Add custom connector**.
-2. **Name:** `SEOLadders`
-3. **URL:** `https://www.seoladders.com/api/mcp` — just the URL, no key. → **Continue**.
-4. **Authentication:** leave **Always required** (Claude marks it *Detected*).
-5. **OAuth client:** leave **No client ID — register one automatically** (also *Detected*). Leave the headers section empty.
-6. **Add** → **Connect**. Claude sends you to SEOLadders to sign in and approve access, then connects itself. If you're already signed in it takes one click; otherwise you get the usual magic-link email.
+#### Step 1. Add the skill
 
-> No API key is involved in the Claude app. You approve once and every tool runs against your own sites.
+The Claude app takes skills as a `.zip` file. Pick **one** of these ways to get it.
 
-> The **Skill** gives Claude the process; the **MCP connector** gives it execution. In the Claude app you want **both**. (In Claude Code / Cursor you connect with a key in the config `headers` — see below.)
+**Way A: ask Claude to make the zip (easiest)**
 
-### Claude Code  (or Cursor / Windsurf / Codex)
+Paste this into any Claude chat:
 
-**1) Install the skill** — the understanding + slash commands:
+```
+Package the skill at https://github.com/Kwesi-dev/seo-ladders-skill.git into a zip I can upload: the seoladders folder, with SKILL.md at its root.
+```
+
+Claude hands you back a file to download.
+
+**Way B: make the zip yourself**
+
+1. On this page, click the green **Code** button, then **Download ZIP**, and unzip it.
+2. Inside, find the folder called **`seoladders`**.
+3. Zip **only that folder**:
+   - **Mac:** right-click `seoladders`, then **Compress "seoladders"**.
+   - **Windows:** right-click `seoladders`, then **Send to**, then **Compressed (zipped) folder**.
+
+> ⚠️ **Zip the `seoladders` folder, not the whole download.** If you upload the zip GitHub gave you, Claude shows the error *"SKILL.md file must be in the top-level folder"*.
+
+**Then upload it:**
+
+1. In Claude, go to **Customize → Skills → +**.
+   (On some versions: **Settings → Capabilities → Skills → Upload skill**.)
+2. Choose your `seoladders.zip`.
+3. It appears under **Personal skills**.
+
+#### Step 2. Add the connector
+
+1. Go to **Customize → Connectors → + → Add custom connector**.
+2. Fill it in like this:
+
+| Field | What to enter |
+|---|---|
+| **Name** | `SEOLadders` |
+| **URL** | `https://www.seoladders.com/api/mcp` |
+| **Authentication** | **Sign in now** (Claude marks it *Detected*) |
+| **OAuth client** | **Register automatically** (Claude marks it *Detected*) |
+| **Request headers** | Leave empty |
+
+3. Click **Add**, then **Connect**.
+4. A SEOLadders sign-in window opens. Sign in (you get the usual email link) and approve access.
+
+That's it. No API key is needed in the Claude app.
+
+#### Step 3. Check it works
+
+Start a new chat and ask:
+
+```
+Use SEOLadders to show me my AI visibility.
+```
+
+When Claude asks for permission to use SEOLadders, choose **Allow**. You should see your score and the AI engines that mention you.
+
+<br/>
+
+### Claude Code, Cursor, Windsurf or Codex
+
+#### Step 1. Get your API key
+
+Create one on the **MCP & Skill** page in your dashboard (see [Before you start](#before-you-start)).
+
+#### Step 2. Install the skill
+
+Run this in your terminal:
 
 ```bash
 npx skills add Kwesi-dev/seo-ladders-skill/seoladders
 ```
 
-**2) Connect the MCP server** — the tools. Add to your MCP config:
+#### Step 3. Add the connector
+
+Add this to your app's MCP settings. Replace `sk_live_...` with your key.
 
 ```json
 {
@@ -110,92 +170,203 @@ npx skills add Kwesi-dev/seo-ladders-skill/seoladders
 }
 ```
 
-Then type `/seoladders-setup` to confirm everything's connected.
+#### Step 4. Check it works
+
+Type `/seoladders-setup`. It confirms your key works and shows what's connected.
+
+<br/>
 
 ### ChatGPT
 
-Build a **Custom GPT** that calls the API:
+ChatGPT connects through a **Custom GPT** that you make once.
 
-1. **Create a GPT → Configure → Actions → Import from URL** → `https://www.seoladders.com/api/openapi.json`
-2. **Authentication → API Key → Bearer** → paste your `sk_live_...`
-3. Paste `seoladders/SKILL.md` into the GPT's **Instructions** (this gives it the process + commands).
-4. Ask it to "check my AI visibility", "audit my site", or "write an article for &lt;keyword&gt;" — it runs the real calls.
+1. In ChatGPT, go to **Create a GPT → Configure → Actions → Import from URL** and enter:
+   `https://www.seoladders.com/api/openapi.json`
+2. Under **Authentication**, choose **API Key**, then **Bearer**, and paste your `sk_live_...` key.
+3. Open [`seoladders/SKILL.md`](seoladders/SKILL.md), copy all of it, and paste it into the GPT's **Instructions** box. (This is the skill.)
+4. Save, then ask: *"Check my AI visibility."*
 
-> **Per-user keys:** a *published* GPT with API-Key auth uses one key for everyone. So each user should create their **own** Custom GPT with their own key — or, on ChatGPT Pro/Business, add the MCP server (`/api/mcp`) as a custom connector (per-user auth).
+> **Keep your GPT private.** A shared GPT uses your key for everyone who opens it, so each person should make their own GPT with their own key. On ChatGPT Pro or Business, you can instead add `https://www.seoladders.com/api/mcp` as a custom connector.
 
-### Any terminal / other AI
+<br/>
 
-Export the key and use the `curl` commands (see **Commands (raw API)** below) — works anywhere, no install:
+### Terminal or another AI tool
+
+Save your key:
 
 ```bash
 export SEO_LADDERS_API_KEY=sk_live_...
 ```
 
-Base URL `https://www.seoladders.com/api/v1`. Auth header on every call: `Authorization: Bearer $SEO_LADDERS_API_KEY`. Target a specific site with `?site=<domain>` or an `X-Site: <domain>` header (defaults to your active site).
+Then use the commands in [For developers](#for-developers). They need `curl` and `jq`.
 
 ---
 
-## Why both Skill + MCP?
+## Try it
 
-- **Skill = the brain.** The proper AI-SEO process and the commands — *how* and *when* to use SEOLadders. Without it, Claude has tools but no strategy (it'd write before auditing, skip the AI-visibility loop, miss the GEO angle, run automation without asking).
-- **MCP = the hands.** The same operations as authenticated, auto-discovered tools that actually execute — and they run server-side, so they work even in apps where raw `curl` can't (like the Claude web app).
+Good first questions:
 
-They're complementary, not either/or — add **both** so Claude *understands* SEOLadders and can *run* it. In ChatGPT you get the same pairing by pasting `SKILL.md` into Instructions (brain) + the OpenAPI Action (hands).
+| Ask | What you get |
+|---|---|
+| *"Show me my AI visibility."* | Your score, and which AI engines mention you |
+| *"Who does ChatGPT recommend instead of me?"* | The competitors named in your place |
+| *"Which pages does AI cite for my questions?"* | The websites AI trusts for your topic |
+| *"Show me the outreach emails waiting for me."* | Emails already written for you to send |
+| *"Which of my pages are losing traffic?"* | Pages to refresh, from your Search Console |
+| *"What is my agent writing this week?"* | Your upcoming articles |
+
+You can also type a command directly, like `/ai-visibility`. See the [full list](#everything-you-can-ask-for).
 
 ---
 
-## Slash Commands
+## Something not working?
 
-Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app namespaces skill commands (Claude Code / plugins), they appear under the skill as `/seoladders:<command>` (e.g. `/seoladders:link-building`, `/seoladders:gsc-audit`). Both forms invoke the same command.
+| What you see | What to do |
+|---|---|
+| *"SKILL.md file must be in the top-level folder"* when uploading | You zipped the whole download. Zip only the `seoladders` folder ([Step 1](#step-1-add-the-skill)). |
+| The Claude connector doesn't open a sign-in window, or nothing happens | Remove the connector and add it again. |
+| **401** or *"unauthorized"* | Your key is wrong or missing. Copy it again, or create a new one on the **MCP & Skill** page. |
+| **402** or *"subscription required"* | Your trial or plan has ended. Start one from the link in the message. |
+| *"gsc_not_connected"* | Connect Google Search Console in your dashboard. |
+| Commands like `/ai-visibility` don't show up in Claude Code | Run `/seoladders-setup`, or copy the files in `seoladders/commands/` into your project's `.claude/commands/` folder. |
+
+Still stuck? Ask in the [Discord](https://discord.gg/2xfNfCPAHZ).
+
+---
+
+## Everything you can ask for
+
+You don't need to remember these: asking in plain English works. In some apps the commands appear as `/seoladders:<name>` (for example `/seoladders:ai-visibility`). Both work the same.
+
+Most commands only read what your agent already collected and are **free**. Commands marked **metered** use part of your monthly allowance.
+
+Click a group to open it.
+
+<details>
+<summary><b>Start here</b></summary>
 
 | Command | What it does |
 |---|---|
-| `/seoladders` | Overview, account status, and the proper AI-SEO process |
-| `/seoladders-setup` | Check the API key + what's connected (CMS / Search Console / Analytics), list your sites |
-| `/my-keywords` | The keywords the agent already chose, by topic cluster, with what is scheduled (free) |
-| `/write-article` | The writing plan (what the agent writes and when), and today's article on request |
-| `/overview` | The dashboard home: wins, AI visibility, search clicks, articles, audit, recent activity (free) |
-| `/search-console [question]` | Your Google Search Console data, any dimension, date range or filter, plus stored trends (free, cached) |
-| `/analytics [question]` | Your Google Analytics data: summary, AI-assistant visits, or any GA4 report (free, cached) |
-| `/brand-profile` | What the agent knows about your business: identity, audiences, internal links (free) |
-| `/usage` | What's left of this cycle's allowances (free) |
-| `/settings` | Current autofill and auto-publish settings (free) |
-| `/link-exchange` | Your Link Exchange membership, credits and the links placed for you (free) |
-| `/ai-visibility` | AI-visibility score across engines (+ sub-views: citations, sentiment, sources) |
-| `/content-gaps` | Buyer questions where AI doesn't name you — what to write to win AI answers |
-| `/prompts` | List, add, and swap the prompts you track (incl. GSC-derived); shows your cap |
-| `/actions` | Fetch prioritized recommendations (outreach, Reddit, content gaps) |
-| `/link-building` | Pages AI cites for you **and** pages linking to your competitors but not you — quality-scored, with a contact and a drafted pitch; list, find/refresh, update, follow-up |
-| `/competitors` | Competitors tracked for AI share-of-voice (10 slots on Pro, 5 on trial) — list, promote suggestions, add |
-| `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
-| `/gsc-audit` | The audit the agent runs every week: health score and every open issue with what to do |
-| `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
-| `/indexing` | Which pages Google actually knows about — sitemap vs crawl vs impressions, and Google's own verdict (quota-gated) |
-| `/keyword-research [seed]` | New keyword ideas (metered; read `/my-keywords` first) |
-| `/keyword-lookup <keywords>` | Volume, difficulty, CPC and intent for keywords you have in mind (metered) |
-| `/serp-check <keyword>` | Google's top 10, your rank, or who Google's AI Overview cites (metered) |
-| `/my-backlinks` | The links pointing at your site and where each came from (free) |
-| `/site-check <check>` | Page speed, AI readiness, llms.txt, sitemaps, E-E-A-T on your site (free) |
-| `/topical-authority` | The topic clusters the agent built, with keywords and tracked prompts (read-only) |
-| `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
-| `/publish <article-id>` | Publish a generated draft to your connected CMS |
-| `/optimize` | Rewrite pages stuck on page 2+ using GSC data |
-| `/content-calendar` | List, schedule, and manage AutoBlog articles |
-| `/posts` | Your generated/published articles — content inventory (avoid re-covering topics) |
-| `/knowledge` | The knowledge base the agent writes from: read it, add a fact, correct a section |
+| `/seoladders` | A quick tour: your account and how SEOLadders works |
+| `/seoladders-setup` | Checks your setup and what's connected (website, Search Console, Analytics), and lists your sites |
+| `/overview` | Your dashboard home: wins, AI visibility, search clicks, articles, audit and recent activity |
+| `/usage` | What's left of this month's allowances |
+| `/settings` | Whether autofill and auto-publish are on |
 
-Command files live in `seoladders/commands/`. If they're not auto-registered by your installer, run `/seoladders-setup` or copy `commands/*.md` into your project's `.claude/commands/` folder.
+</details>
+
+<details>
+<summary><b>AI search (ChatGPT, Perplexity, Gemini, Claude, Google AI)</b></summary>
+
+| Command | What it does |
+|---|---|
+| `/ai-visibility` | Your AI visibility score on each engine, plus the sources AI cites and how it talks about you |
+| `/content-gaps` | Questions where AI names someone else and not you, so you know what to write |
+| `/prompts` | The questions your agent asks AI for you. See them, add new ones, or swap them |
+| `/competitors` | The competitors you're compared with in AI answers (10 on Pro, 5 on the trial) |
+
+</details>
+
+<details>
+<summary><b>Google search</b></summary>
+
+| Command | What it does |
+|---|---|
+| `/search-console` | Your Google Search Console data: any query, page or date range |
+| `/analytics` | Your Google Analytics data, including visits from AI assistants |
+| `/gsc-audit` | Your weekly site audit: health score and every issue, with what to do |
+| `/content-radar` | Pages that are losing traffic, stuck on page 2, or hard to find |
+| `/indexing` | Which of your pages Google knows about (limited checks) |
+| `/rankings <domain>` | The keywords any website ranks for on Google |
+| `/serp-check <keyword>` | Google's top 10 for a keyword, your rank, or what Google's AI cites (**metered**) |
+| `/site-check <check>` | Page speed, AI readiness, llms.txt, sitemaps and E-E-A-T on your site |
+
+</details>
+
+<details>
+<summary><b>Keywords and topics</b></summary>
+
+| Command | What it does |
+|---|---|
+| `/my-keywords` | The keywords your agent already chose, by topic, and what's scheduled |
+| `/topical-authority` | Your topic clusters, with their keywords and tracked questions |
+| `/keyword-research [seed]` | New keyword ideas (**metered**, so check `/my-keywords` first) |
+| `/keyword-lookup <keywords>` | Search volume, difficulty, cost per click and intent for keywords you have in mind (**metered**) |
+| `/competitor-gap` | Keywords your competitors rank for and you don't |
+
+</details>
+
+<details>
+<summary><b>Articles</b></summary>
+
+| Command | What it does |
+|---|---|
+| `/write-article` | What your agent is writing and when, and today's article if you ask for it |
+| `/content-calendar` | See and manage your scheduled articles |
+| `/posts` | The articles already written and published |
+| `/publish <article-id>` | Publish a finished draft to your website |
+| `/optimize` | Rewrite a page that's stuck on page 2 or losing traffic |
+| `/knowledge` | What your agent knows about your business. Read it, add a fact or correct it |
+| `/brand-profile` | Your business details, audiences and the pages it links to |
+
+</details>
+
+<details>
+<summary><b>Links and outreach</b></summary>
+
+| Command | What it does |
+|---|---|
+| `/link-building` | Pages worth getting listed on: the ones AI cites, and the ones that link to your competitors but not you. Each comes with the author and an outreach email already written. You read it and send it yourself; nothing is sent for you. |
+| `/actions` | Your to-do list: outreach, Reddit and content gaps |
+| `/my-backlinks` | The links pointing to your site and where each came from |
+| `/link-exchange` | Your Link Exchange membership, credits and the links placed for you |
+
+</details>
+
+---
+
+## How SEOLadders works
+
+Once you sign up, your agent works on its own. This is the order it follows, and the order the skill uses when it guides you:
+
+```mermaid
+flowchart TD
+    A["1. Sign up and onboard<br/>it reads your website"] --> B["2. Connect your website<br/>and Search Console"]
+    B --> C["3. Audit your site<br/>/gsc-audit, /content-radar"]
+    C --> D["4. Check AI visibility<br/>/ai-visibility"]
+    D --> E["5. Plan topics and keywords<br/>/topical-authority, /prompts"]
+    E --> F["6. Write and publish articles<br/>/content-calendar, /posts"]
+    F --> G["7. Improve weak pages<br/>/optimize"]
+    G --> H["8. Get listed on the right pages<br/>/link-building, /actions"]
+```
+
+**About publishing:** autofill and auto-publish are **on by default**. Auto-publish turns itself on when you connect your website. If you'd rather approve each article first, ask to turn auto-publish off.
+
+The full first-run guide is in [`seoladders/references/onboarding-guide.md`](seoladders/references/onboarding-guide.md).
+
+---
 
 ## Plans
 
 | Plan | Price | What you get |
 |---|---|---|
-| **Pro (trial)** | 7-day free trial | Full access to everything below |
-| **Pro** | $97/mo, per website — **50% off your first month** | 30 articles/mo · 30 tracked AI prompts · 100 keyword searches/mo · AI visibility, citations & sentiment · Content Radar · site audits · auto-publish |
+| **Free trial** | 7 days free | Everything in Pro |
+| **Pro** | $97 a month per website, with **50% off your first month** | 30 articles a month, 30 tracked AI questions, 100 keyword searches a month, AI visibility, Content Radar, site audits and auto-publish |
 
-The API (this skill + MCP) is included in Pro — not a separate add-on. Current pricing is at [seoladders.com/pricing](https://www.seoladders.com/pricing). See `seoladders/references/plans-and-backlinks.md` for detail.
+The skill and MCP are included in Pro, not a paid add-on. Current prices: [seoladders.com/pricing](https://www.seoladders.com/pricing).
 
-## Commands (raw API)
+---
+
+## For developers
+
+<details>
+<summary><b>Use the API directly with curl</b></summary>
+
+<br/>
+
+- **Base URL:** `https://www.seoladders.com/api/v1`
+- **Auth:** send `Authorization: Bearer $SEO_LADDERS_API_KEY` on every call.
+- **Pick a site:** add `?site=<domain>` or an `X-Site: <domain>` header. Without it, your active site is used.
 
 ```bash
 # Your sites
@@ -208,7 +379,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/ai-visibility/content-gaps | jq '.gaps[]'   # AI content gaps
 
-# Competitor gap — keywords competitors rank for that you don't (SEO content gap)
+# Competitor gap: keywords competitors rank for that you don't
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
   -d '{"competitors":["competitor.com"]}' https://www.seoladders.com/api/v1/keywords/competitor-gap | jq '.keywords[]'
 
@@ -216,7 +387,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/content-radar | jq '.rows[] | {url, bucket, action}'
 
-# Keyword research — manual seed, or find-for-me (empty body)
+# Keyword research: manual seed, or find-for-me (empty body)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
   -d '{"seed":"ai seo tools","filterByDR":true}' https://www.seoladders.com/api/v1/keywords/search | jq '.keywords[]'
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type: application/json" \
@@ -234,13 +405,13 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.c
 curl -s -G -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/search-console \
   --data-urlencode 'dimensions=page,device' --data-urlencode 'days=28' | jq '.rows[:10]'
 curl -s -G -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/analytics \
-  --data-urlencode 'metrics=sessions,keyEvents' --data-urlencode 'dimensions=sessionDefaultChannelGroup' | jq '.rows' 
+  --data-urlencode 'metrics=sessions,keyEvents' --data-urlencode 'dimensions=sessionDefaultChannelGroup' | jq '.rows'
 
 # Calendar · actions
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/calendar | jq '.entries[]'
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" https://www.seoladders.com/api/v1/actions | jq '.actions[]'
 
-# --- Automation (opt-in — CONFIRM with the user before enabling any of these) ---
+# --- Automation (opt-in: CONFIRM with the user before enabling any of these) ---
 # Publish one generated draft now (must be "ready") · autofill · auto-publish
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/articles/ARTICLE_ID/publish | jq '{published, url}'
@@ -250,27 +421,41 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" -H "Content-Type
   -d '{"enabled":true}' https://www.seoladders.com/api/v1/settings/auto-publish | jq '{autoPublish, message}'
 ```
 
-Full endpoint reference + every command's curl lives in `seoladders/SKILL.md`. The MCP server exposes a tool for each of these — same capabilities, auto-discovered.
+Every command's full API call is in [`seoladders/SKILL.md`](seoladders/SKILL.md). The MCP connector has a tool for each one.
 
-## AI Visibility (the differentiator)
+</details>
 
-This is what classic "AI SEO" skills don't do. Throughout the week (Pro has no manual runs, so there is nothing to trigger by hand), SEOLadders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode the buyer questions you track, then measures:
+<details>
+<summary><b>More about AI visibility</b></summary>
 
-- **Visibility score** + per-engine mention rate
-- **Share of voice** — you vs. each competitor (10 tracked slots on Pro, 5 on the trial)
-- **Sentiment** — how positively AI frames you
-- **Citations** — the sources AI pulls from (earn links where `owned:false`)
-- **Content gaps** — buyer questions where AI doesn't name you → write those next (`/content-gaps`)
+<br/>
 
-Pull it all with `/ai-visibility` and its sub-views (`/ai-visibility/citations`, `/ai-visibility/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`). See `seoladders/references/ai-visibility-playbook.md`.
+Throughout the week, SEOLadders asks ChatGPT, Perplexity, Gemini, Claude, Google AI Overview and Google AI Mode the buyer questions you track. There are no manual runs on Pro, so there's nothing to start by hand. It then measures:
 
-## References
+- **Visibility score**, and how often each engine mentions you
+- **Share of voice:** you against each competitor (10 tracked on Pro, 5 on the trial)
+- **Sentiment:** how positively AI describes you
+- **Citations:** the sources AI pulls from. Pages marked `owned:false` are other sites worth getting listed on.
+- **Content gaps:** questions where AI doesn't name you, so you know what to write next (`/content-gaps`)
 
-- `seoladders/references/ai-visibility-playbook.md` — grow how AI recommends you
-- `seoladders/references/audit-playbook.md` — the audit-first workflow
-- `seoladders/references/onboarding-guide.md` — first-run setup + API key
-- `seoladders/references/plans-and-backlinks.md` — plan detail
+Sub-views: `/ai-visibility/citations`, `/ai-visibility/content-gaps`, `/ai-visibility/sentiment`, `/ai-visibility/sources`. More in [`seoladders/references/ai-visibility-playbook.md`](seoladders/references/ai-visibility-playbook.md).
+
+</details>
+
+<details>
+<summary><b>Reference guides in this repo</b></summary>
+
+<br/>
+
+- [`ai-visibility-playbook.md`](seoladders/references/ai-visibility-playbook.md): grow how AI recommends you
+- [`audit-playbook.md`](seoladders/references/audit-playbook.md): the audit-first workflow
+- [`onboarding-guide.md`](seoladders/references/onboarding-guide.md): first-run setup and API key
+- [`plans-and-backlinks.md`](seoladders/references/plans-and-backlinks.md): plan details
+
+</details>
+
+---
 
 ## Community
 
-Install help, updates, and a place to share ranking wins — **join the Discord**: https://discord.gg/2xfNfCPAHZ
+Setup help, updates, and a place to share your wins: **[join the Discord](https://discord.gg/2xfNfCPAHZ)**.
