@@ -40,7 +40,7 @@ Skip any line that has no data yet (a brand-new account may still be running its
 5. **Track the right prompts** (`/prompts`) — add buyer questions, including GSC-derived ones; respect the cap.
 6. **Keywords** (`/my-keywords`) — the ones the agent already chose; `/keyword-research` for anything else.
 7. **Schedule content** (`/content-calendar`) — the agent writes and publishes it, with internal links.
-8. **Optimize** (`/optimize`) — page-2, declining, and stale pages (it also refreshes in place).
+8. **Optimize** (`/optimize`) — stuck, declining and stale articles (it also refreshes in place).
 9. **Act on recommendations** (`/actions`) — outreach, Reddit, content gaps from real monitoring data.
 
 ## What to do with the result

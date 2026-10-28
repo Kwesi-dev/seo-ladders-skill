@@ -17,7 +17,7 @@ requires:
 SEOLadders is the all-in-one platform for getting **recommended by AI** and **ranking on Google**. This skill lets your agent run the whole loop end to end:
 
 - **AI visibility (GEO/AEO)** — see whether all six tracked engines mention you (ChatGPT, Perplexity, Gemini, Claude, Google AI Overview, and Google AI Mode — the last two are separate engines); track the prompts that matter; measure share-of-voice, sentiment, and which sources AI cites.
-- **SEO** — audit your site, see what you (and competitors) rank for, find keywords matched to your domain rating, write and publish full articles, and optimize pages stuck on page 2.
+- **SEO** — audit your site, see what you (and competitors) rank for, find keywords matched to your domain rating, write and publish full articles, and optimize articles stuck off page 1.
 
 It runs against the SEOLadders REST API. There are two ways to execute the commands — **pick MCP whenever it's available:**
 
@@ -100,13 +100,13 @@ Most API responses carry `instructions_for_agent`: what to tell the user, with t
 
 1. **Sign up and onboard** at seoladders.com — we scrape the site to learn the brand, audience, and competitors (no manual knowledge entry needed).
 2. **Connect the two things that matter most:** the website/CMS and **Google Search Console** (powers the audit, Content Radar, rankings, and prompt discovery).
-3. **Audit before writing anything** — run `/gsc-audit` and `/content-radar` to find what's slipping, stuck, or buried (CTR, decay, page-2, cannibalization, pre-join pages).
+3. **Audit before writing anything** — run `/gsc-audit` and `/content-radar` to find what's slipping, stuck, or buried (CTR, decay, page 3 to 4, competing articles, pre-join articles).
 4. **Check AI visibility** (`/ai-visibility`) — are you in the answer when buyers ask ChatGPT/Perplexity/Gemini/Claude/Google AI? Find the gaps and the sources AI cites.
 5. **Topic clusters** (`/topical-authority`, `/my-keywords`) — the agent builds them: a pillar topic holds *both* the keywords to rank for on Google *and* the AI prompts to win in AI answers. Show them; `/keyword-research` only for something they don't cover. This is the unit that ties SEO and GEO together.
 6. **Track the right prompts** (`/prompts`) — pull suggestions from your real **Google Search Console** queries, keywords, or People-Also-Asked, then add the good ones under the relevant topic. Respect the plan's prompt cap; swap low-value prompts when full.
 7. **Let the agent ship** — the agent schedules keywords on the content calendar (`/content-calendar`) and AutoBlog researches, writes and publishes each one on its date. `/write-article` shows that plan and can start today's article early; it never writes off-calendar or in batches. **Autofill and auto-publish are already on** (auto-publish switches itself on when a CMS is connected), so this is the default behaviour, not something to enable. If the user wants to approve each article first, turn auto-publish *off* — review mode is the switch.
 8. **Review what it wrote** (`/posts`) — full research → draft → media → FAQ → citations → schema, done by the agent. Every article ships with internal links, AI images, YouTube embeds, and citations.
-9. **Optimize** — rewrite page-2 / declining / stale pages from GSC data (`/optimize`); it also refreshes content in place.
+9. **Optimize** — rewrite stuck / declining / stale articles from GSC data (`/optimize`); it also refreshes content in place.
 10. **Act on recommendations** (`/actions`) — outreach, Reddit, and content-gap actions drawn from your real monitoring data.
 11. **Link building** (`/link-building`) — turn the pages AI cites for your prompts, the pages linking to your competitors and not to you, and the best-of lists already ranking for what your buyers search, into quality-scored prospects with a discovered contact and a drafted, ready-to-send pitch (publisher pitch, forum reply, review request, repo PR, directory submission). You review and send; never auto-sent.
 
@@ -128,7 +128,7 @@ Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app
 | `/competitors` | Competitors tracked for AI share-of-voice (10 slots on Pro, 5 on trial) — list, promote suggestions, add |
 | `/rankings <domain>` | Keywords a domain ranks for on Google (yours or a competitor) |
 | `/gsc-audit` | The audit the agent runs every week: health score and every open issue with what to do |
-| `/content-radar` | Pull every page from GSC, flag decline/stuck/buried, route to optimize |
+| `/content-radar` | Every article in GSC that needs work (dead, declining, competing, stale, stuck, buried), each with one fix. Articles only |
 | `/indexing` | Which pages Google actually knows about — sitemap vs crawl vs impressions, and Google's own verdict (quota-gated) |
 | `/keyword-research [seed]` | New keyword ideas with volume, difficulty, DR-match (metered; read `/my-keywords` first) |
 | `/keyword-lookup <keywords>` | Volume, difficulty, CPC and intent for 1-10 keywords you have in mind (metered) |
@@ -138,7 +138,7 @@ Run any command by name — e.g. `/link-building`, `/ai-visibility`. If your app
 | `/competitor-gap` | Keywords your competitors rank for that you don't — your SEO content gap |
 | `/topical-authority` | The topic clusters the agent built: keywords (covered / planned / gap) and the AI prompts tracked under each (read-only) |
 | `/publish <article-id>` | Publish a generated draft to your connected CMS |
-| `/optimize` | Rewrite pages stuck on page 2+ using GSC data |
+| `/optimize` | Rewrite an article stuck off page 1 using its GSC data |
 | `/content-calendar` | List, schedule, and manage AutoBlog articles |
 | `/posts` | Your generated/published articles — content inventory (avoid re-covering topics) |
 | `/knowledge` | The knowledge base the agent writes from: read it, add a fact, correct a section |
@@ -223,7 +223,7 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/audit | jq '{audit, issues: .report.issues[:10]}'
 
-# Content Radar — every page worth fixing, with an optimize verdict
+# Content Radar: every article worth fixing, with its verdict (articles only)
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   https://www.seoladders.com/api/v1/content-radar | jq '.rows[] | {url, bucket, action, position}'
 
@@ -290,7 +290,7 @@ curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" -d '{"competitors":["competitor.com"]}' \
   https://www.seoladders.com/api/v1/keywords/competitor-gap | jq '.keywords[]'
 
-# Optimize a page stuck on page 2 — pass keyword + a source (sourceUrl for any
+# Optimize an article stuck off page 1: pass keyword + a source (sourceUrl for any
 # page incl. pre-join blogs, or blogPostId for a page we generated)
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" \

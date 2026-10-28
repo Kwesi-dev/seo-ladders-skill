@@ -2,6 +2,8 @@
 
 The article writer. **The agent already writes for you.** It schedules your keywords on the AutoBlog calendar and, on each scheduled day, researches the topic, writes the article (sources, images, internal links, FAQ, schema) and publishes it. So this command starts by showing that plan. Usually the answer is "it's on its way".
 
+**What it links to.** Internal links go to the user's own pages. Outside links are only the sources it cites as evidence (research, news, public bodies, official docs such as Google Search Central or schema.org), never a competitor's blog or a vendor in the user's market. In a comparison or "best X" article, each product it reviews is linked once, to that product's own site. Any other outside link the writer adds is removed before saving, and its words are kept.
+
 ## Show the plan first (free)
 
 ```bash

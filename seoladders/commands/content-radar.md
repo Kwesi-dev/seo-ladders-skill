@@ -1,6 +1,6 @@
 # /content-radar
 
-Pull every page from Google Search Console, flag what's declining/stuck/buried, and route each to optimize. Needs GSC.
+Pull every article from Google Search Console, flag what's dead, declining, competing, out of date, stuck or buried, and route each to a fix. Articles only. Needs GSC.
 
 ```bash
 curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
@@ -18,23 +18,30 @@ curl -s -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   - `declining` — was ranking higher and has slipped for weeks without recovering (see `positionDrop`).
   - `striking_distance` — **stuck** around positions 5–20 and no longer climbing. Pages still moving up on their own are deliberately excluded — they're already fixing themselves.
   - `low_ctr` — ranks on page 1 but earns **under half the clicks normal for its position**. A title/meta problem, not a content one. (Position-relative, not a flat CTR threshold — 2% is fine at #9 and terrible at #2.)
-  - `page_two_plus` — stuck on page 2 (positions ~21–40), never reached page 1.
-  - `stale` — no GSC symptom yet, but the page has gone out of date: an old year in the title, or dead outbound links. Caught before the ranking slips.
-  - `cannibalization` — two of *their own* pages are splitting one query. The row carries the weaker contender and `competingWith` names the other. Rewriting either in isolation does not fix it; the fix is merge or differentiate.
+  - `page_two_plus` — on page 3 or 4 (positions 21 to 40) and never reached page 1. The dashboard labels it "Page 3 or 4".
+  - `stale` ("Needs updating") — no GSC symptom yet, but the article has gone out of date: an old year in the title or an H1 to H3 heading (never the body), or outbound links that are really dead (404/410, real server errors, DNS failures; a site blocking bots, such as LinkedIn's 999, does not count). Caught before the ranking slips.
+  - `cannibalization` ("Competing pages") — two of *their own* articles are splitting one query. The row carries the weaker contender and `competingWith` names the other. Rewriting either in isolation does not fix it; the fix is merge or differentiate. Only reported once, over the last 90 days, both have at least 25 impressions for the query inside the top 50 and the weaker earns at least 15% of the stronger's impressions.
   - `underperforming` — buried past position 40 for 6+ months. **Not an optimize candidate** — a rewrite rarely rescues a page this deep; the fix is usually merge or prune.
 - **`action`** — the verdict:
   - `refresh` — the verdict for `declining` and `stale` rows: a page that already ranks and needs bringing up to date rather than rebuilding. `blogPostId`-only, so it applies to pages *we* generated. Do not send these to `/optimize`.
-  - `optimize` — an article to rewrite from GSC data (`/optimize`). Covers articles *we* generated (by `blogPostId`) **and pre-join pages written before joining** (by the page `url`). For a `url` page nothing is refreshed in place — we hold no copy of it, so the result is a draft to hand to the user. See the warning in `/optimize`.
+  - `optimize` — an article to rewrite from GSC data (`/optimize`). Covers articles *we* generated (by `blogPostId`) **and pre-join articles written before joining** (by the page `url`). For a `url` page nothing is refreshed in place — we hold no copy of it, so the result is a draft to hand to the user. See the warning in `/optimize`.
   - `write` — a dead **article** URL worth rebuilding at the *same* URL, so the impressions Google already holds carry over. Only appears when nothing else of theirs covers the query. **This never happens on its own:** automatic dead-URL rebuilds are switched off, so the row is a suggestion and the rebuild is a button the user presses (it bills article generation, not the optimize allowance).
-  - `recommend` — advice rather than a rewrite. Covers **non-article pages** (`/pricing`, `/features`, `/docs`), **dead pages** (rebuild-or-redirect decision), and **buried pages** (merge/prune decision) → fetch the checklist below.
+  - `recommend` — advice rather than a rewrite. Covers **dead articles whose content moved** (redirect decision), **buried articles** (merge/prune decision) and **competing articles** (which one owns the query) → fetch the checklist or fix plan below.
 - **`redirectTo`** — dead rows only. When present, a live page of theirs already ranks for that query, so the page **moved** rather than died: redirect to it. Never write a replacement in that case — you'd put two of their own pages against one query.
 - **`source`** — `internal` (we generated it) vs `external` (pre-join / not ours).
 
-> **Homepage is excluded.** The root/homepage (e.g. `https://site.com/`) is left out of the radar automatically — it's a brand/navigational page that ranks for brand terms, not actionable content. If a user asks why their homepage isn't listed, that's why; it's not a bug.
+> **Articles only.** Content Radar lists blog posts and articles, nothing else. The homepage, pricing, tool, feature, docs, legal and section index pages (`/blog`, `/tools`, `/features`) are never on it, because every fix it offers (refresh, rewrite, merge, prune) is a content fix. If a user asks why their pricing page isn't listed, that's why; it's not a bug. Technical and on-page problems on those pages come from the site audit (`/gsc-audit`), and a checklist for any single URL from the recommendations call below.
 
-## Getting recommendations for an external page
+> **Waiting periods.** An article is only judged once it has had time to settle, so nothing is flagged while it is still climbing:
+> - `declining`, `low_ctr`, `striking_distance`, `stale`: about 3 months.
+> - `page_two_plus`, `underperforming`: about 6 months.
+> - `dead_with_demand` and `cannibalization`: straight away. A 404 that Google still shows has no settling period, and a competing pair is only reported once both pages already hold real impressions.
+>
+> Age is the publish date for articles we wrote, and how far back Search Console has data for the URL otherwise (`maturitySource`: `published` or `observed`).
 
-For rows with `action: "recommend"`, fetch a concrete on-page checklist:
+## Getting recommendations for one page
+
+For rows with `action: "recommend"`, fetch a concrete on-page checklist. This call takes any URL on the site, including a pricing or feature page that is not on the radar:
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
@@ -49,21 +56,22 @@ Returns `{ recommendations: [{ title, detail, priority }], cached }`. A saved ch
 - `dead_with_demand` → starts with the rebuild-vs-redirect decision, and never suggests editing a page that doesn't exist;
 - `underperforming` → starts with merge / prune / rebuild, and deliberately does **not** suggest title tweaks, which don't move a page from #70.
 
-## Fixing one page: the full diagnosis and work order
+## Fixing one article: the full diagnosis and work order
 
-For a page you can't rewrite through SEOLadders (landing, pricing, feature and
-docs pages that live in the user's own codebase), ask for the fix plan:
+For a row on the radar that you can't rewrite through SEOLadders (a buried or
+competing article, or one that lives in the user's own codebase), ask for the fix plan:
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $SEO_LADDERS_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"url":"https://example.com/pricing"}' \
+  -d '{"url":"https://example.com/blog/crm-onboarding-guide"}' \
   https://www.seoladders.com/api/v1/content-radar/fix-plan | jq .
 ```
 
 Returns `{ plan: { url, keyword, diagnosis, items, publishable, generatedAt }, markdown, cached }`.
 
 - Pass the `url` exactly as the radar reports it. `keyword` is optional and defaults to the row's own primary query, so don't guess one.
+- Only URLs on the radar get a plan: the plan is built from the row's own position, trend and bucket. Any other URL, a pricing page included, comes back with an `error` saying it is not on the Content Radar. Use the recommendations call above for those.
 - `diagnosis` says why it's losing (position, click-through against what that position normally earns, the trend, missing schema).
 - `items` are the fixes: `replace` items are finished strings ready to paste (title, meta description, H1, FAQ, JSON-LD); `spec` items are requirements for copy that must be written inside the site's own components (the opening, heading outline, coverage gaps). Never invent that prose yourself.
 - `markdown` is a complete work order with acceptance criteria: the form to hand a coding agent.

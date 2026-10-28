@@ -1,6 +1,6 @@
 # /optimize <url>
 
-Rewrite a page stuck on page 2+ using its real Google Search Console data.
+Rewrite an article stuck off page 1 using its real Google Search Console data.
 
 **This is metered.** Every call spends one optimize/refresh credit from a small
 monthly allowance shared with refresh. Never loop over a Content Radar list: pick the
